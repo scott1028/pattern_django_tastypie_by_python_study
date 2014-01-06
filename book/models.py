@@ -3,9 +3,9 @@
 from django.db import models
 
 # Create your models here.
-from tastypie.utils.timezone import now
+# from tastypie.utils.timezone import now
 from django.contrib.auth.models import User
-from django.db import models
+# from django.db import models
 from django.utils.text import slugify
 
 
