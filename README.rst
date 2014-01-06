@@ -6,7 +6,11 @@ Django-Tastypie 範例
 
     ::
 
-        # http://django-tastypie.readthedocs.org/en/latest/index.html#quick-start
+        # Base API
+            http://django-tastypie.readthedocs.org/en/latest/index.html#quick-start
+            
+        # REST API
+            http://django-tastypie.readthedocs.org/en/latest/resources.html
 
 
 **架構流程**
