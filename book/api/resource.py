@@ -10,5 +10,7 @@ class first_book_resource(ModelResource):
     class Meta:
         queryset = first_book.objects.all()
         resource_name = 'first_book'
-        allowed_methods = ['get']
+
+        # 定義可接受的方法
+        allowed_methods = ['get','post','put','delete']
         pass
