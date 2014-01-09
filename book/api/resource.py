@@ -51,8 +51,11 @@ class first_book_resource(ModelResource):
         # 成為網址的 Resource
         resource_name = 'first_book'
 
-        # 允許接受 Client Request 訪問的方法, 預設有 get 如果設定為 [] 將無法使用這個 Resource。
-        list_allowed_methods = ['get', 'post']
+        # 照抄 detail_allowed_methods=list_allowed_methods, 允許接受 Client Request 訪問的方法, 預設有 get 如果設定為 [] 將無法使用這個 Resource。
+        list_allowed_methods = ['get', 'post', 'put', 'delete', 'patch'] # all support is default
+
+        # (*)真正定義 Restful 支援的方法有哪些, 如果沒寫進去就伺服器就不支援(只需要設定這個即可)
+        detail_allowed_methods = ['get', 'post', 'put', 'delete', 'patch'] # all support is default
 
         # 定義可以接受 Client Request Query String 的欄位與規則 ex: /api/first_book/?format=json&title=test
         filtering = {
