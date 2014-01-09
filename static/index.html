@@ -9,21 +9,10 @@
 	/api/first_book_api/?format=json
 
 	<script>
-		// get api information
-		var test_get_api=function(){
-			$.ajax({
-				url:'/api/first_book_api/?format=json',
-				type:'get',
-				success:function(res,status,xhr){
-					console.log(res);
-				}
-			});
-		};
-
 		// get list
 		var test_get_list_first_book_api=function(){
 			$.ajax({
-				url:'/api/first_book_api/first_book/?format=json',
+				url:'/api/first_book/?format=json',
 				type:'get',
 				success:function(res,status,xhr){
 					console.log(res);
@@ -32,9 +21,9 @@
 		};
 
 		// get
-		var test_get_first_book_api_by_id_eq_1=function(){
+		var test_get_first_book_api_by_id=function(id){
 			$.ajax({
-				url:'/api/first_book_api/first_book/1?format=json',
+				url:'/api/first_book/'+id.toString()+'/?format=json',
 				type:'get',
 				success:function(res,status,xhr){
 					console.log(res);
@@ -45,7 +34,7 @@
 		// post
 		var test_post_first_book_api=function(){
 			$.ajax({
-				url:'/api/first_book_api/first_book/?format=json',
+				url:'/api/first_book/?format=json',
 				data:{
 					title:'test'
 				},
@@ -56,12 +45,40 @@
 			});
 		};
 
-		// put
+		// put, 可用於更新資料(這個算是替換資料, 會整筆被換掉類似 Ext.apply)
+		var test_put_first_book_api_by_id=function(id){
+			$.ajax({
+				url:'/api/first_book/'+id.toString()+'/?format=json',
+				data:{
+					// 如果要更新部分資料原本的欄位依然要補齊
+					title:'update by put'
+				},
+				type:'put',
+				success:function(res,status,xhr){
+					console.log(res);
+				}
+			});
+		};
+
+		// patch, 根據 put 在擴充的方法(更適合用來更新資料, 類似 Ext.applyif)
+		var test_patch_first_book_api_by_id=function(id){
+			$.ajax({
+				url:'/api/first_book/'+id.toString()+'/?format=json',
+				data:{
+					// 只需要放你想更新的欄位就可以了
+					title:'update by patch'
+				},
+				type:'patch',
+				success:function(res,status,xhr){
+					console.log(res);
+				}
+			});
+		};
 
 		// delete
-		var test_delete_first_book_api_by_id_eq_1=function(){
+		var test_delete_first_book_api_by_id=function(id){
 			$.ajax({
-				url:'/api/first_book_api/first_book/1?format=json',
+				url:'/api/first_book/'+id.toString()+'/?format=json',
 				type:'delete',
 				success:function(res,status,xhr){
 					console.log(res);
