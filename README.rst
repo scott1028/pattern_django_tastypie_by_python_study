@@ -101,13 +101,15 @@ Django-Tastypie 範例
                     # 成為網址的 Resource
                     resource_name = 'first_book'
 
-                    # 照抄 detail_allowed_methods=list_allowed_methods, 允許接受 Client Request 訪問的方法, 預設有 get 如果設定為 [] 將無法使用這個 Resource。
+                    # 照抄 detail_allowed_methods=list_allowed_methods, 允許接受 Client Request 訪問的方法,
+                      預設有 get 如果設定為 [] 將無法使用這個 Resource。
                     list_allowed_methods = ['get', 'post', 'put', 'delete', 'patch'] # all support is default
 
                     # (*)定義 Restful 支援的方法有哪些, 如果沒寫進去就伺服器就不支援(只需要設定這個即可)
                     detail_allowed_methods = ['get', 'post', 'put', 'delete', 'patch'] # all support is default
 
-                    # 定義可以接受 Client Request Query String 的欄位與規則 ex: /api/first_book/?format=json&title=test
+                    # 定義可以接受 Client Request Query String 的欄位與規則
+                      ex: /api/first_book/?format=json&title=test
                     filtering = {
                         'title': 'exact gt gte lt lte',
                     }
@@ -121,10 +123,10 @@ Django-Tastypie 範例
                     # 資料序列化, 如果要使用 Ajax Post 這邊要寫成這樣(至少要實作 Serializer 才會有回應, 與接收資料)
                     serializer = Serializer() # 預設
 
-                    # 驗證用戶是誰(Authentication, BasicAuthentication, ApiKeyAuthentication, SessionAuthentication, DigestAuthentication, OAuthAuthentication, MultiAuthentication)
+                    # 驗證用戶是誰
                     authentication = Authentication()
 
-                    # 用戶的權限(Authorization, ReadOnlyAuthorization, DjangoAuthorization)
+                    # 用戶的權限
                     authorization = Authorization()
                 ...
 
@@ -141,7 +143,8 @@ Django-Tastypie 範例
                         console.log(res);
                     }
                     // 補充說明：
-                    // contentType:'application/x-www-form-urlencoded; charset=UTF-8', 預設這個 Tastypie 並不支援要自己實做。
+                    // contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+                       預設這個 Tastypie 並不支援要自己實做。
                     // processData: false, // 預設為開啟，將對 data 的 JavaScript 物件做 urlencode, 
                     // 如果使用 application/json 就不用開啟, 但是 data 參數要記得用 JSON.stringify 轉換成 JSON
                 });
