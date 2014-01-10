@@ -106,3 +106,20 @@ class first_book_resource(ModelResource):
 
         # 用戶的權限(Authorization, ReadOnlyAuthorization, DjangoAuthorization)
         authorization = Authorization()
+
+    # 負責 Response: /api/first_book/?format=json
+    def get_list(self, request, **kwargs):
+        # print 'recv request list'
+
+        print dir(request)
+
+        # 似乎會寫目前是由誰訪問(通常是 AnonymousUser 字串)
+        print request.user
+
+        # 測試一下 bundle 的資料處理功能, 參考：http://django-tastypie.readthedocs.org/en/latest/bundles.html
+        bundle = self.build_bundle(obj=request.user, request=request)
+        print bundle
+
+        return super(first_book_resource,self).get_list(request, **kwargs)
+        # return self.create_response(request, None)
+        pass
