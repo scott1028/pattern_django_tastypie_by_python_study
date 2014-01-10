@@ -6,7 +6,7 @@
 </head>
 <body>
 	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-	/api/first_book_api/?format=json
+	/api/first_book/?format=json
 
 	<script>
 		// get list
@@ -94,7 +94,7 @@
 			參考：http://zh.wikipedia.org/wiki/REST
 			說明：這邊使用 Ajax 預設的 Content-Type: 'application/x-www-form-urlencoded; charset=UTF-8',
 			      伺服器必須實做 Serializer 的 from_urlencode 和 to_urlencode 方法。
-			      
+
 			定義：/book/api/resouce.py, get,post,put,delete
 				get：id
 				post：data
