@@ -83,10 +83,15 @@ Django-Tastypie 範例
 
     ::
 
+        # Resource 接收到 Request/Response 運作流程
+          參考：http://django-tastypie.readthedocs.org/en/latest/resources.html#flow-through-the-request-response-cycle
+
         # 驗證用戶為誰
           參考：http://django-tastypie.readthedocs.org/en/latest/authentication.html
+
         # 使用者權限
           參考：http://django-tastypie.readthedocs.org/en/latest/authorization.html
+          
         # 資料吞吐 Serializer
           參考：http://django-tastypie.readthedocs.org/en/latest/serialization.html#implementing-your-own-serializer
 
