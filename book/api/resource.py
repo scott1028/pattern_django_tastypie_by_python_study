@@ -111,15 +111,18 @@ class first_book_resource(ModelResource):
     def get_list(self, request, **kwargs):
         # print 'recv request list'
 
-        print dir(request)
+        # print dir(request)
 
         # 似乎會寫目前是由誰訪問(通常是 AnonymousUser 字串)
         print request.user
 
-        # 測試一下 bundle 的資料處理功能, 參考：http://django-tastypie.readthedocs.org/en/latest/bundles.html
-        bundle = self.build_bundle(obj=request.user, request=request)
-        print bundle
+        # 測試一下 bundle 的資料處理功能(可以改變原先的吞吐資料)
+        # 參考：http://django-tastypie.readthedocs.org/en/latest/bundles.html
+        # 參考：http://django-tastypie.readthedocs.org/en/latest/resources.html#build-bundle
+        bundle = self.build_bundle(obj=request.user, data={'a':1}, request=request)
+        bundle = self.alter_detail_data_to_serialize(request, bundle)
+        # return self.create_response(request, bundle)
 
         return super(first_book_resource,self).get_list(request, **kwargs)
+        # return '0'
         # return self.create_response(request, None)
-        pass
