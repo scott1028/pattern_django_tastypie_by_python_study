@@ -17,30 +17,57 @@ from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 
 # 似乎預設的 Ajax 就是使用 content-type: application/x-www-form-urlencoded
-import urlparse
-class urlencodeSerializer(Serializer):
+# import urlparse
+# class urlencodeSerializer(Serializer):
 
-    formats = ['json', 'jsonp', 'xml', 'yaml', 'html', 'plist', 'urlencode']
+#     formats = ['json', 'jsonp', 'xml', 'yaml', 'html', 'plist', 'urlencode']
 
-    content_types = {
-        'json': 'application/json',
-        'jsonp': 'text/javascript',
-        'xml': 'application/xml',
-        'yaml': 'text/yaml',
-        'html': 'text/html',
-        'plist': 'application/x-plist',
-        'urlencode': 'application/x-www-form-urlencoded',
-    }
+#     content_types = {
+#         'json': 'application/json',
+#         'jsonp': 'text/javascript',
+#         'xml': 'application/xml',
+#         'yaml': 'text/yaml',
+#         'html': 'text/html',
+#         'plist': 'application/x-plist',
+#         'urlencode': 'application/x-www-form-urlencoded',
+#     }
 
-    # 實作轉換部分
-    def from_urlencode(self, data,options=None):
-        """ handles basic formencoded url posts """
-        qs = dict((k, v if len(v)>1 else v[0] )
-            for k, v in urlparse.parse_qs(data).iteritems())
-        return qs
+#     # 實作轉換部分
+#     def from_urlencode(self, data,options=None):
+#         """ handles basic formencoded url posts """
+#         qs = dict((k, v if len(v)>1 else v[0] )
+#             for k, v in urlparse.parse_qs(data).iteritems())
+#         return qs
 
-    def to_urlencode(self,content):
-        pass
+#     def to_urlencode(self,content):
+#         pass
+
+from tastypie.serializers import Serializer
+import time
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+
+# class CustomJSONSerializer(Serializer):
+#     # 回應給 Client
+#     def to_json(self, data, options=None):
+#         options = options or {}
+
+#         data = self.to_simple(data, options)
+
+#         # Add in the current time.
+#         data['requested_time'] = time.time()
+
+#         return json.dumps(data, cls=DjangoJSONEncoder, sort_keys=True)
+
+#     # 從 Client 接收
+#     def from_json(self, content):
+#         data = json.loads(content)
+
+#         if 'requested_time' in data:
+#             # Log the request here...
+#             pass
+
+#         return data
 
 # 設定這個 API 回復的內容
 class first_book_resource(ModelResource):
@@ -54,7 +81,7 @@ class first_book_resource(ModelResource):
         # 照抄 detail_allowed_methods=list_allowed_methods, 允許接受 Client Request 訪問的方法, 預設有 get 如果設定為 [] 將無法使用這個 Resource。
         list_allowed_methods = ['get', 'post', 'put', 'delete', 'patch'] # all support is default
 
-        # (*)真正定義 Restful 支援的方法有哪些, 如果沒寫進去就伺服器就不支援(只需要設定這個即可)
+        # (*)定義 Restful 支援的方法有哪些, 如果沒寫進去就伺服器就不支援(只需要設定這個即可)
         detail_allowed_methods = ['get', 'post', 'put', 'delete', 'patch'] # all support is default
 
         # 定義可以接受 Client Request Query String 的欄位與規則 ex: /api/first_book/?format=json&title=test
@@ -62,11 +89,17 @@ class first_book_resource(ModelResource):
     		'title': 'exact gt gte lt lte',
 		}
 
+        # 可用來替除這個 Model 要顯示在 Response JSON 的 Field
+        # excludes = ['title']
+
 		# 如果要製作 CRUD Restful API 必須在額外設定以下：資料序列化、用戶驗證、用戶權限(預設只有 ReadOnly)
 		# 參考：http://django-tastypie.readthedocs.org/en/latest/resources.html#resource-options-aka-meta
 
-        # 資料序列化, 如果要使用 Ajax Post 這邊要寫成這樣
-        serializer = urlencodeSerializer()
+        # 資料序列化, 如果要使用 Ajax Post 這邊要寫成這樣(至少要實作 Serializer 才會有回應, 與接收資料)
+        # 參考：http://django-tastypie.readthedocs.org/en/latest/serialization.html#implementing-your-own-serializer
+        # serializer = urlencodeSerializer() # 客製化
+        # serializer = CustomJSONSerializer() # 客製化
+        serializer = Serializer() # 預設
 
         # 驗證用戶是誰(Authentication, BasicAuthentication, ApiKeyAuthentication, SessionAuthentication, DigestAuthentication, OAuthAuthentication, MultiAuthentication)
         authentication = Authentication()

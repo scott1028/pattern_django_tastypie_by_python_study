@@ -14,6 +14,7 @@
 			$.ajax({
 				url:'/api/first_book/?format=json',
 				type:'get',
+				contentType:'application/json',
 				success:function(res,status,xhr){
 					console.log(res);
 				}
@@ -25,8 +26,9 @@
 			$.ajax({
 				url:'/api/first_book/'+id.toString()+'/?format=json',
 				type:'get',
+				contentType:'application/json',
 				success:function(res,status,xhr){
-					console.log(res);
+					console.log(res); 
 				}
 			});
 		};
@@ -35,13 +37,16 @@
 		var test_post_first_book_api=function(){
 			$.ajax({
 				url:'/api/first_book/?format=json',
-				data:{
-					title:'test'
-				},
+				data:'{"title":"create by post with content-type/json'+(new Date).toJSON()+'"}',
 				type:'post',
+				contentType:'application/json',
 				success:function(res,status,xhr){
 					console.log(res);
 				}
+				// 補充說明：
+				// contentType:'application/x-www-form-urlencoded; charset=UTF-8', 預設這個 Tastypie 並不支援要自己實做。
+				// processData: false, // 預設為開啟，將對 data 的 JavaScript 物件做 urlencode, 
+				// 如果使用 application/json 就不用開啟, 但是 data 參數要記得用 JSON.stringify 轉換成 JSON
 			});
 		};
 
@@ -49,11 +54,10 @@
 		var test_put_first_book_api_by_id=function(id){
 			$.ajax({
 				url:'/api/first_book/'+id.toString()+'/?format=json',
-				data:{
-					// 如果要更新部分資料原本的欄位依然要補齊
-					title:'update by put'
-				},
+				// 如果要更新部分資料原本的欄位依然要補齊
+				data:'{"title":"create by put with content-type/json'+(new Date).toJSON()+'"}',
 				type:'put',
+				contentType:'application/json',
 				success:function(res,status,xhr){
 					console.log(res);
 				}
@@ -64,11 +68,10 @@
 		var test_patch_first_book_api_by_id=function(id){
 			$.ajax({
 				url:'/api/first_book/'+id.toString()+'/?format=json',
-				data:{
-					// 只需要放你想更新的欄位就可以了
-					title:'update by patch'
-				},
+				// 只需要放你想更新的欄位就可以了
+				data:'{"title":"update by patch with content-type/json'+(new Date).toJSON()+'"}',
 				type:'patch',
+				contentType:'application/json',
 				success:function(res,status,xhr){
 					console.log(res);
 				}
@@ -80,6 +83,7 @@
 			$.ajax({
 				url:'/api/first_book/'+id.toString()+'/?format=json',
 				type:'delete',
+				contentType:'application/json',
 				success:function(res,status,xhr){
 					console.log(res);
 				}
@@ -88,6 +92,9 @@
 
 		/*
 			參考：http://zh.wikipedia.org/wiki/REST
+			說明：這邊使用 Ajax 預設的 Content-Type: 'application/x-www-form-urlencoded; charset=UTF-8',
+			      伺服器必須實做 Serializer 的 from_urlencode 和 to_urlencode 方法。
+			      
 			定義：/book/api/resouce.py, get,post,put,delete
 				get：id
 				post：data
