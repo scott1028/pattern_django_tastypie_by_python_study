@@ -79,7 +79,7 @@ class first_book_resource(ModelResource):
         resource_name = 'first_book'
 
         # 照抄 detail_allowed_methods=list_allowed_methods, 允許接受 Client Request 訪問的方法, 預設有 get 如果設定為 [] 將無法使用這個 Resource。
-        list_allowed_methods = ['get', 'post', 'put', 'delete', 'patch'] # all support is default
+        list_allowed_methods = ['get', 'post'] # all support is default
 
         # (*)定義 Restful 支援的方法有哪些, 如果沒寫進去就伺服器就不支援(只需要設定這個即可)
         detail_allowed_methods = ['get', 'post', 'put', 'delete', 'patch'] # all support is default
@@ -88,6 +88,10 @@ class first_book_resource(ModelResource):
         filtering = {
     		'title': 'exact gt gte lt lte',
 		}
+
+        # 總是回復資料
+        # 如果沒設定 put post patch 會沒有 Response, delete 本身維持沒有 Response
+        always_return_data = True
 
         # 可用來替除這個 Model 要顯示在 Response JSON 的 Field
         # excludes = ['title']
@@ -107,6 +111,13 @@ class first_book_resource(ModelResource):
         # 用戶的權限(Authorization, ReadOnlyAuthorization, DjangoAuthorization)
         authorization = Authorization()
 
+    #
+    # 從 Django Model to Json 的過程會調用。可以用來增加欄位
+    def dehydrate(self, bundle):
+        bundle.data['custom_field'] = "Whatever you want"
+        return bundle
+
+    #
     # 負責 Response: /api/first_book/?format=json
     def get_list(self, request, **kwargs):
         # print 'recv request list'
@@ -114,15 +125,57 @@ class first_book_resource(ModelResource):
         # print dir(request)
 
         # 似乎會寫目前是由誰訪問(通常是 AnonymousUser 字串)
-        print request.user
+        # print request.user
 
         # 測試一下 bundle 的資料處理功能(可以改變原先的吞吐資料)
         # 參考：http://django-tastypie.readthedocs.org/en/latest/bundles.html
         # 參考：http://django-tastypie.readthedocs.org/en/latest/resources.html#build-bundle
-        bundle = self.build_bundle(obj=request.user, data={'a':1}, request=request)
-        bundle = self.alter_detail_data_to_serialize(request, bundle)
+        # bundle = self.build_bundle(obj=req_uest.user, data={'a':1}, request=request)
+        # bundle = self.alter_detail_data_toserialize(request, bundle)
+
+        # bundle = self.build_bundle(obj=first_book(title="build from bundle"),data={"title":123} , request=request)
+        # print dir(bundle)
+
+        # print bundle.obj
+
+        # test=first_book(title="build from bundle")
+
+        # print test
+        # print test.title
+        # print dir(test)
+
+        # # print self.full_dehydrate(bundle)
+
         # return self.create_response(request, bundle)
 
-        return super(first_book_resource,self).get_list(request, **kwargs)
+        # print request.user # 這是 User Model 的 Instance 物件
+
+        # request.user.username='31231'
+
+        # print request.user.username
+
+        # print '-'*10
+
+        # bundle = self.build_bundle(obj=request.user, request=request)
+
+        # print bundle
+
+        # print '-'*10
+
+        # bundle = self.dehydrate(bundle)
+
+        # print bundle
+
+        # print '-'*10
+
+        # return self.create_response(request, bundle)
+
+        # print dir(request.user)
+
+        json_data=super(first_book_resource,self).get_list(request, **kwargs)
+
+        # print json_data
+
+        return json_data
         # return '0'
         # return self.create_response(request, None)
