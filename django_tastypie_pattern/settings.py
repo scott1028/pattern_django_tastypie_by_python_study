@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'tastypie',
     'book',     # created by manage.py startapp book
+    'article',
 )
 
 MIDDLEWARE_CLASSES = (
