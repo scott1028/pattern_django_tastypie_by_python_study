@@ -79,6 +79,48 @@ Django-Tastypie 範例
                 # 根據上述 api 的格式，所以 api_name 要命名好！
             )
 
+
+**Resource Relational Sample**
+
+    ::
+
+        資料表關聯
+            Group has many users,permissions [使用 users, permissions 命名]
+            Users has many groups, too [使用 groups 命名]
+            Permission has many Group, too [使用 group_set 命名]
+
+            *User don't have any permission relation setting, it uses is_supperuser column flag.
+
+        # api/resource.py
+        class GroupModelResource(ModelResource):
+
+            # 其實 user_set 類型等於底下的 groups, 都是 <django.db.models.fields.related.ManyRelatedManager object>
+            # 應該只是內部定義名稱的屬性明稱不同而已。
+            users = fields.ToManyField('api.resource.UserModelResource','user_set')
+
+            class Meta:
+                queryset = Group.objects.all()
+                resource_name = 'group'
+                allow_methods = ['get']
+
+        class PermissionModelResource(ModelResource):
+            class Meta:
+                queryset = Permission.objects.all()
+                resource_name = 'permission'
+                allow_methods = ['get']
+
+        class UserModelResource(ModelResource):
+
+            groups = fields.ToManyField('api.resource.GroupModelResource','groups')
+            permissions = fields.ToManyField('api.resource.PermissionModelResource','user_permissions')
+
+            class Meta:
+                queryset = User.objects.all()
+                resource_name = 'user'
+                allow_method = ['get']
+            pass
+
+
 **Restful CRUD Resource & Ajax**
 
     ::
