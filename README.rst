@@ -84,7 +84,7 @@ Django-Tastypie 範例
 
     ::
 
-        資料表關聯
+        # 資料表關聯(似乎是互相 ManyToMany 關聯)
             Group has many users,permissions [使用 users, permissions 命名]
             Users has many groups, too [使用 groups 命名]
             Permission has many Group, too [使用 group_set 命名]
