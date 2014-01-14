@@ -27,7 +27,12 @@ from tastypie import fields
 
 # # 增加一個關聯的 Resource, belongs to article_resource
 class reporter_resource(ModelResource):
-    #
+
+    # reporter hasMany article 條件下。請參考 article.models 內的設定。
+    articles=fields.ToManyField('article.api.resource.reporter_resource','article_set')
+    # article_set 是 Article Object 的成員，被關聯的 Model 被設定 foreign_key 即可。
+    # Reporter.objects.first().article_set.create(headline='create by Reporter Instance',pub_date=datetime.now()) 建立關聯紀錄
+
     class Meta:
         queryset = Reporter.objects.all()
 
@@ -59,14 +64,7 @@ class article_resource(ModelResource):
     # 根據專案路徑, 剛好指到上面那一個 ModelResource, 欄位
     # 參考：http://django-tastypie.readthedocs.org/en/latest/fields.html#full
     # reporters=fields.ToManyField(reporter_resource,'reporter')#, full=True, null=True,related_name='test')
-    # fields.ToManyField()
     # 或
-    #reporters=fields.ToManyField('article.api.resource.reporter_resource','reporters') #,full=True, null=True)
-    # reporters=fields.ToManyField(reporter_resource,'reporter')
-    # reporters=fields.ToManyField('article.api.resource.reporter_resource','reporter')#,full=True, null=True)
-    # null=True, default is False, means not allow relational field is empty. will cause error.
-    # full=True, default is False, means reporters field only show relational_uri.
-    # 兩種寫法都可以, 後面的 full 跟 null = True 如果沒寫, 若無關聯資料會出錯。
 
     class Meta:
         # 搜尋資料的依據

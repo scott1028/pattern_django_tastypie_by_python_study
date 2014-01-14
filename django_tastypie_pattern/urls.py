@@ -12,6 +12,8 @@ from book.api.resource import first_book_resource
 from article.api.resource import article_resource
 from article.api.resource import reporter_resource
 
+from api.resource import UserModelResource,PermissionModelResource,GroupModelResource
+
 # print article_resource().urls
 # print reporter_resource().urls
 
@@ -25,6 +27,10 @@ urlpatterns = patterns('',
     url(r'^api/', include(first_book_resource().urls)),
     url(r'^api2/', include(article_resource().urls)),
     url(r'^api3/', include(reporter_resource().urls)), # 代表不允許直接存取 reporter_resource api, 從 urls.py 內關閉
+
+    url(r'^api4/', include(UserModelResource().urls)),
+    url(r'^api4/', include(GroupModelResource().urls)),
+    url(r'^api4/', include(PermissionModelResource().urls)),
     # 根據 Tastypie 的 API 設計風格
     #
     # 觀看 api 有那些東西
