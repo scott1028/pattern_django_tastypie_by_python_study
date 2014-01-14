@@ -24,7 +24,7 @@ urlpatterns = patterns('',
 
     url(r'^api/', include(first_book_resource().urls)),
     url(r'^api2/', include(article_resource().urls)),
-    # url(r'^api3/', include(reporter_resource().urls)), # 代表不允許直接存取 reporter_resource api, 從 urls.py 內關閉
+    url(r'^api3/', include(reporter_resource().urls)), # 代表不允許直接存取 reporter_resource api, 從 urls.py 內關閉
     # 根據 Tastypie 的 API 設計風格
     #
     # 觀看 api 有那些東西

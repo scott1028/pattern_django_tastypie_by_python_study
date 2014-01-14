@@ -30,7 +30,7 @@ class reporter_resource(ModelResource):
     #
     class Meta:
         queryset = Reporter.objects.all()
-        
+
         resource_name = 'reporter'
 
         # 照抄 detail_allowed_methods=list_allowed_methods, 允許接受 Client Request 訪問的方法, 預設有 get 如果設定為 [] 將無法使用這個 Resource。
@@ -58,10 +58,11 @@ class article_resource(ModelResource):
     # 可以自己定義關聯欄位名稱。本案定義為：reporters
     # 根據專案路徑, 剛好指到上面那一個 ModelResource, 欄位
     # 參考：http://django-tastypie.readthedocs.org/en/latest/fields.html#full
-    # reporters=fields.ToManyField(reporter_resource,'reporters', full=True, null=True)
+    # reporters=fields.ToManyField(reporter_resource,'reporter')#, full=True, null=True,related_name='test')
+    # fields.ToManyField()
     # 或
     #reporters=fields.ToManyField('article.api.resource.reporter_resource','reporters') #,full=True, null=True)
-    reporters=fields.ToManyField(reporter_resource,'reporter_set')
+    # reporters=fields.ToManyField(reporter_resource,'reporter')
     # reporters=fields.ToManyField('article.api.resource.reporter_resource','reporter')#,full=True, null=True)
     # null=True, default is False, means not allow relational field is empty. will cause error.
     # full=True, default is False, means reporters field only show relational_uri.
@@ -102,3 +103,4 @@ class article_resource(ModelResource):
     def dehydrate(self, bundle):
         bundle.data['custom_field'] = "Whatever you want"
         return bundle
+
