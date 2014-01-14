@@ -29,7 +29,7 @@ from tastypie import fields
 class reporter_resource(ModelResource):
 
     # reporter hasMany article 條件下。請參考 article.models 內的設定。
-    articles=fields.ToManyField('article.api.resource.reporter_resource','article_set')
+    articles = fields.ToManyField('article.api.resource.reporter_resource','article_set')
     # article_set 是 Article Object 的成員，被關聯的 Model 被設定 foreign_key 即可。
     # Reporter.objects.first().article_set.create(headline='create by Reporter Instance',pub_date=datetime.now()) 建立關聯紀錄
 
@@ -59,12 +59,9 @@ class reporter_resource(ModelResource):
 # 設定這個 API 回復的內容
 class article_resource(ModelResource):
 
-    # 這邊遇到問題了！
-    # 可以自己定義關聯欄位名稱。本案定義為：reporters
-    # 根據專案路徑, 剛好指到上面那一個 ModelResource, 欄位
-    # 參考：http://django-tastypie.readthedocs.org/en/latest/fields.html#full
-    # reporters=fields.ToManyField(reporter_resource,'reporter')#, full=True, null=True,related_name='test')
-    # 或
+    # belongs to reporter (like has one)
+    # 看來似乎不大對！需要再修改
+    reporter_is_who = fields.ToOneField('article.api.resource.article_resource','reporter')
 
     class Meta:
         # 搜尋資料的依據
@@ -77,7 +74,7 @@ class article_resource(ModelResource):
         list_allowed_methods = ['get', 'post'] # all support is default
 
         # (*)定義 Restful 支援的方法有哪些, 如果沒寫進去就伺服器就不支援(只需要設定這個即可)
-        detail_allowed_methods = ['put', 'delete', 'patch'] # all support is default
+        detail_allowed_methods = ['get','put', 'delete', 'patch'] # all support is default, 讓 rest 只支援 put delete patch 這三個而已, 排除 get 跟 post
 
         # 定義可以接受 Client Request Query String 的欄位與規則 ex: /api/first_book/?format=json&title=test
         filtering = {
