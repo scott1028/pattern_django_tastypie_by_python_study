@@ -21,7 +21,7 @@ class Article(models.Model):
     pub_date = models.DateField()
 
     # 會產生一個 reporter_id 的欄位
-    reporter = models.ForeignKey(Reporter)
+    reporter = models.ForeignKey(Reporter,related_name='reporters')
 
     def __unicode__(self):
         # 會出現在後檯的 List String

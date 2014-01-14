@@ -1,0 +1,104 @@
+# coding:utf-8
+# 這個檔案要自己建立。
+# 這個檔案可以隨便放只要你相關的 Model 可以載入就好。所以不一定要放在 app_folder/api.py 下。
+
+from tastypie.resources import ModelResource
+from tastypie.serializers import Serializer
+
+# CUD 將要求輸入使用者帳號密碼
+# from tastypie.authentication import BasicAuthentication
+# 不需驗證使用者
+from tastypie.authentication import Authentication
+
+# 根據 Django-Admin 後台所題設定的使用者權限來驗證
+# from tastypie.authorization import DjangoAuthorization
+# 不需驗證使用者權限
+from tastypie.authorization import Authorization
+
+import time
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+
+# import my model
+from article.models import Reporter
+from article.models import Article
+
+from tastypie import fields
+
+# # 增加一個關聯的 Resource, belongs to article_resource
+class reporter_resource(ModelResource):
+    #
+    class Meta:
+        queryset = Reporter.objects.all()
+        
+        resource_name = 'reporter'
+
+        # 照抄 detail_allowed_methods=list_allowed_methods, 允許接受 Client Request 訪問的方法, 預設有 get 如果設定為 [] 將無法使用這個 Resource。
+        list_allowed_methods = ['get', 'post'] # all support is default
+
+        # (*)定義 Restful 支援的方法有哪些, 如果沒寫進去就伺服器就不支援(只需要設定這個即可)
+        detail_allowed_methods = ['put', 'delete', 'patch'] # all support is default
+
+        # 總是回復資料
+        # 如果沒設定 put post patch 會沒有 Response, delete 本身維持沒有 Response
+        always_return_data = True
+
+        serializer = Serializer() # 預設
+
+        # 驗證用戶是誰(Authentication, BasicAuthentication, ApiKeyAuthentication, SessionAuthentication, DigestAuthentication, OAuthAuthentication, MultiAuthentication)
+        authentication = Authentication()
+
+        # 用戶的權限(Authorization, ReadOnlyAuthorization, DjangoAuthorization)
+        authorization = Authorization()
+
+# 設定這個 API 回復的內容
+class article_resource(ModelResource):
+
+    # 這邊遇到問題了！
+    # 可以自己定義關聯欄位名稱。本案定義為：reporters
+    # 根據專案路徑, 剛好指到上面那一個 ModelResource, 欄位
+    # 參考：http://django-tastypie.readthedocs.org/en/latest/fields.html#full
+    # reporters=fields.ToManyField(reporter_resource,'reporters', full=True, null=True)
+    # 或
+    #reporters=fields.ToManyField('article.api.resource.reporter_resource','reporters') #,full=True, null=True)
+    reporters=fields.ToManyField(reporter_resource,'reporter_set')
+    # reporters=fields.ToManyField('article.api.resource.reporter_resource','reporter')#,full=True, null=True)
+    # null=True, default is False, means not allow relational field is empty. will cause error.
+    # full=True, default is False, means reporters field only show relational_uri.
+    # 兩種寫法都可以, 後面的 full 跟 null = True 如果沒寫, 若無關聯資料會出錯。
+
+    class Meta:
+        # 搜尋資料的依據
+        queryset = Article.objects.all()
+
+        # 成為網址的 Resource, 如果沒設定定就會採用 ModelResource 的 Class Name
+        resource_name = 'article'
+
+        # 照抄 detail_allowed_methods=list_allowed_methods, 允許接受 Client Request 訪問的方法, 預設有 get 如果設定為 [] 將無法使用這個 Resource。
+        list_allowed_methods = ['get', 'post'] # all support is default
+
+        # (*)定義 Restful 支援的方法有哪些, 如果沒寫進去就伺服器就不支援(只需要設定這個即可)
+        detail_allowed_methods = ['put', 'delete', 'patch'] # all support is default
+
+        # 定義可以接受 Client Request Query String 的欄位與規則 ex: /api/first_book/?format=json&title=test
+        filtering = {
+            'headline': 'exact gt gte lt lte',
+        }
+
+        # 總是回復資料
+        # 如果沒設定 put post patch 會沒有 Response, delete 本身維持沒有 Response
+        always_return_data = True
+
+        serializer = Serializer() # 預設
+
+        # 驗證用戶是誰(Authentication, BasicAuthentication, ApiKeyAuthentication, SessionAuthentication, DigestAuthentication, OAuthAuthentication, MultiAuthentication)
+        authentication = Authentication()
+
+        # 用戶的權限(Authorization, ReadOnlyAuthorization, DjangoAuthorization)
+        authorization = Authorization()
+
+    #
+    # 從 Django Model to Json 的過程會調用。可以用來增加欄位
+    def dehydrate(self, bundle):
+        bundle.data['custom_field'] = "Whatever you want"
+        return bundle

@@ -8,6 +8,13 @@ admin.autodiscover()
 # 引入剛剛定義的 tastypie resource api
 from book.api.resource import first_book_resource
 
+# 引入剛剛定義的 tastypie resource api
+from article.api.resource import article_resource
+from article.api.resource import reporter_resource
+
+# print article_resource().urls
+# print reporter_resource().urls
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'django_tastypie_pattern.views.home', name='home'),
@@ -16,6 +23,8 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^api/', include(first_book_resource().urls)),
+    url(r'^api2/', include(article_resource().urls)),
+    # url(r'^api3/', include(reporter_resource().urls)), # 代表不允許直接存取 reporter_resource api, 從 urls.py 內關閉
     # 根據 Tastypie 的 API 設計風格
     #
     # 觀看 api 有那些東西
