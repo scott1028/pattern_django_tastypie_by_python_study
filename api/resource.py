@@ -7,6 +7,8 @@ from tastypie import fields
 from tastypie.resources import ModelResource
 from django.contrib.auth.models import Group,User,Permission
 
+import pdb
+
 class GroupModelResource(ModelResource):
 
     # 其實 user_set 類型等於底下的 groups, 都是 <django.db.models.fields.related.ManyRelatedManager object>
@@ -38,6 +40,7 @@ class UserModelResource(ModelResource):
     def get_list(self, request, **kwargs):
         # this is override method
         base_bundle = self.build_bundle(request=request)
+
         objects = self.obj_get_list(bundle=base_bundle, **self.remove_api_resource_names(kwargs))
         sorted_objects = self.apply_sorting(objects, options=request.GET)
 
@@ -53,4 +56,8 @@ class UserModelResource(ModelResource):
 
         to_be_serialized[self._meta.collection_name] = bundles
         to_be_serialized = self.alter_list_data_to_serialize(request, to_be_serialized)
+
+        # debug
+        pdb.set_trace()
+
         return self.create_response(request, to_be_serialized)
