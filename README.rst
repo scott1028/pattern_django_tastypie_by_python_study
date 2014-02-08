@@ -127,8 +127,16 @@ Django-Tastypie 範例
 
         # Vagrantfile
           config.vm.network :forwarded_port, guest: 80, host: 8080
-          代表 sudo python manage.py runserver 0.0.0.0:80 將被導入 host 的 127.0.0.1:8080
+          代表 sudo python manage.py runserver 0.0.0.0:80 將被導入 Host 的 127.0.0.1:8080
           0.0.0.0 IP 位置必須填寫, 若直接填寫 80 將無法正確連線!
+
+          ifconfig
+          查詢會有 virtualbox 的 10.0.2.15 與 127.0.0.1 的 ip
+          若 config.vm.network :forwarded_port, guest: 3333, host: 3333
+          python manage.py runserver 10.0.2.15:3333 將會導向 Host 的 127.0.0.1:3333
+            或
+          python manage.py runserver 0.0.0.0:3333 將會導向 Host 的 127.0.0.1:3333
+
 
 
 **Restful CRUD Resource & Ajax**
