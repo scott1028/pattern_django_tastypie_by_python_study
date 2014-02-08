@@ -133,52 +133,38 @@ class first_book_resource(ModelResource):
         # bundle = self.build_bundle(obj=req_uest.user, data={'a':1}, request=request)
         # bundle = self.alter_detail_data_toserialize(request, bundle)
 
-        # bundle = self.build_bundle(obj=first_book(title="build from bundle"),data={"title":123} , request=request)
-        # print dir(bundle)
-
-        # print bundle.obj
-
-        # test=first_book(title="build from bundle")
-
-        # print test
-        # print test.title
-        # print dir(test)
-
-        # # print self.full_dehydrate(bundle)
-
-        # return self.create_response(request, bundle)
-
-        # print request.user # 這是 User Model 的 Instance 物件
-
-        # request.user.username='31231'
-
-        # print request.user.username
-
-        # print '-'*10
-
-        # bundle = self.build_bundle(obj=request.user, request=request)
-
-        # print bundle
-
-        # print '-'*10
-
-        # bundle = self.dehydrate(bundle)
-
-        # print bundle
-
-        # print '-'*10
-
-        # return self.create_response(request, bundle)
-
-        # print dir(request.user)
-
-        json_data=super(first_book_resource,self).get_list(request, **kwargs)
+        # json_data=super(first_book_resource,self).get_list(request, **kwargs)
 
         # print json_data
 
-        return json_data
+        # import pdb;pdb.set_trace();
+
+        # return json_data
+
         # return '0'
         # return self.create_response(request, None)
+
+        base_bundle = self.build_bundle(request=request)
+        objects = self.obj_get_list(bundle=base_bundle, **self.remove_api_resource_names(kwargs))
+        sorted_objects = self.apply_sorting(objects, options=request.GET)
+
+        paginator = self._meta.paginator_class(request.GET, sorted_objects, resource_uri=self.get_resource_uri(), limit=self._meta.limit, max_limit=self._meta.max_limit, collection_name=self._meta.collection_name)
+        to_be_serialized = paginator.page()
+
+        # Dehydrate the bundles in preparation for serialization.
+        bundles = []
+
+        for obj in to_be_serialized[self._meta.collection_name]:
+            bundle = self.build_bundle(obj=obj, request=request)
+            bundles.append(self.full_dehydrate(bundle, for_list=True))
+
+        to_be_serialized[self._meta.collection_name] = bundles
+        to_be_serialized = self.alter_list_data_to_serialize(request, to_be_serialized)
+
+        # 包含 meta header
+        # return self.create_response(request, to_be_serialized)
+        # 去除 meta header, only data list
+        return self.create_response(request, bundles)
 
     # 可用來修改上傳的資料
     def hydrate(self, bundle):
