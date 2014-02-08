@@ -169,10 +169,10 @@ class first_book_resource(ModelResource):
     # 可用來修改上傳的資料
     def hydrate(self, bundle):
         # import pdb;pdb.set_trace();
-        bundle.data[u'title']=u'scott modify data in hydrate method!'
+        # bundle.data[u'title']=u'scott modify data in hydrate method!'
 
         # defined field test
-        bundle.data[u'body']=u'scott put test body content!'
+        bundle.data[u'body']=u'scott put test body content in hydrate method override!'
 
         # not extist field test, it will not raise error.
         bundle.data[u'test_field']=u'test field'

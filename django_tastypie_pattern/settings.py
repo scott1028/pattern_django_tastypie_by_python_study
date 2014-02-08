@@ -36,9 +36,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tastypie',
+    'tastypie', # add tastypie package support
     'book',     # created by manage.py startapp book
     'article',
+    'south', # add south package support
+    'people',
 )
 
 MIDDLEWARE_CLASSES = (

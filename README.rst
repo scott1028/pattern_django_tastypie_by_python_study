@@ -229,3 +229,50 @@ Django-Tastypie 範例
                 });
             };
                 ...
+
+
+**Add south package support**
+
+    ::
+
+
+        # install south package
+          pip install south
+
+        # add south to django settings.py's INSTALLED_APPS
+          INSTALLED_APPS = (
+              'django.contrib.admin',
+              'django.contrib.auth',
+              'django.contrib.contenttypes',
+              'django.contrib.sessions',
+              'django.contrib.messages',
+              'django.contrib.staticfiles',
+              'tastypie', # add tastypie package support
+              'book',     # created by manage.py startapp book
+              'article',
+              'south', # add south package support
+              'people',
+          )
+
+        # add a new app
+          manage.py start app people
+
+        # init new app migration schema file
+          $ ./manage.py schemamigration people --initial
+
+        # (option)if there are no south_migrationhistory in database then do this:
+          $ ./manage.py syncdb
+
+        # run migrate database
+          $ ./manage.py migrate people
+
+        # test django shell
+          $ ./manage.py shell
+
+        # test modify database table scheam, after run migrate or syncdb
+          $ vim people/models.py  # then modify it's field defination.
+          $ ./manage.py schemamigration people --auto  # build new schemamigration file
+          $ ./manage.py migrate people  # after do this, the database people table will add a new field.
+
+
+
