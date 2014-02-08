@@ -279,6 +279,7 @@ Django-Tastypie 範例
 
     ::
 
+        ref: https://docs.djangoproject.com/en/dev/topics/db/multi-db/
 
         # set settings.py add another database
         DATABASES = {
@@ -323,4 +324,32 @@ Django-Tastypie 範例
         # save to default database
         row.save()
 
+
+**Override Hydrate and Dehydrate method for create and read data**
+
+    ::
+
+        ref: https://github.com/toastdriven/django-tastypie/blob/master/tastypie/resources.py
+
+        class first_book_resource(ModelResource):
+            
+            ...
+
+            # Response data to client, 從 Django Model to Json 的過程會調用。可以用來增加欄位
+            def dehydrate(self, bundle):
+                bundle.data['custom_field'] = "Whatever you want"
+                return bundle
+
+            # Client send data to server, then you can modify and add some field you want. 可用來修改上傳的資料
+            def hydrate(self, bundle):
+                # import pdb;pdb.set_trace();
+                # bundle.data[u'title']=u'scott modify data in hydrate method!'
+
+                # defined field test
+                bundle.data[u'body']=u'scott put test body content in hydrate method override!'
+
+                # not extist field test, it will not raise error.
+                bundle.data[u'test_field']=u'test field'
+
+                return bundle
 
