@@ -121,6 +121,16 @@ Django-Tastypie 範例
             pass
 
 
+**搭配 Vagrant 啟動專案**
+
+    ::
+
+        # Vagrantfile
+          config.vm.network :forwarded_port, guest: 80, host: 8080
+          代表 sudo python manage.py runserver 0.0.0.0:80 將被導入 host 的 127.0.0.1:8080
+          0.0.0.0 IP 位置必須填寫, 若直接填寫 80 將無法正確連線!
+
+
 **Restful CRUD Resource & Ajax**
 
     ::
