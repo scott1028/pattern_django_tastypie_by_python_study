@@ -142,6 +142,8 @@ class article_resource(ModelResource):
 
         # print bundles
 
+        # 包含 meta header
         # return self.create_response(request, to_be_serialized)
+        # 去除 meta header, only data list
         return self.create_response(request, bundles)
 
