@@ -275,4 +275,52 @@ Django-Tastypie 範例
           $ ./manage.py migrate people  # after do this, the database people table will add a new field.
 
 
+**Multi Database and Model Router Support**
+
+    ::
+
+
+        # set settings.py add another database
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            },
+            'scott': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': os.path.join(BASE_DIR, 'scott.sqlite3'),
+            }
+        }
+
+        # run syncdb with --database=scott flag, it will build all tables of this project.
+        ./manage.py syncdb --database=scott
+
+        # test how to use multi database
+        ./manage.py shell
+
+        from book.models import first_book
+
+
+        # query scott database
+        first_book.objects.using('scott').all()
+        
+        # query default database
+        first_book.objects.using('default').all()
+        
+        # query default database, too
+        first_book.objects.all()
+
+
+        # create record into scott database
+        row=first_book(title=u'test for scott database')
+        
+        # save to scott database
+        row.save(using='scott')
+
+        # save to default database, you can run both up line and this line, it will save two record into two database.
+        row.save(using='default')
+
+        # save to default database
+        row.save()
+
 
