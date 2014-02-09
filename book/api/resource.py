@@ -10,6 +10,8 @@ from tastypie.serializers import Serializer
 # from tastypie.authentication import BasicAuthentication
 # 不需驗證使用者
 from tastypie.authentication import Authentication
+from tastypie.authentication import SessionAuthentication
+
 
 # 根據 Django-Admin 後台所題設定的使用者權限來驗證
 # from tastypie.authorization import DjangoAuthorization
@@ -106,7 +108,12 @@ class first_book_resource(ModelResource):
         serializer = Serializer() # 預設
 
         # 驗證用戶是誰(Authentication, BasicAuthentication, ApiKeyAuthentication, SessionAuthentication, DigestAuthentication, OAuthAuthentication, MultiAuthentication)
-        authentication = Authentication()
+        
+        # 無視存取權限(簡單來說就是開放式存取, 不需要認證)
+        # authentication = Authentication()
+
+        # 必須先使用 http://127.0.0.1:3333/admin 登入後拿到的 csrf token 就可以用這個 session auth 存取了
+        authentication = SessionAuthentication()
 
         # 用戶的權限(Authorization, ReadOnlyAuthorization, DjangoAuthorization)
         authorization = Authorization()

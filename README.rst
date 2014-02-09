@@ -353,3 +353,50 @@ Django-Tastypie 範例
 
                 return bundle
 
+
+**SessionAuthentication & Django CSRF Token Access**
+
+    ::
+
+        ref: http://django-tastypie.readthedocs.org/en/latest/cookbook.html
+        ref: https://docs.djangoproject.com/en/dev/ref/templates/api/#subclassing-context-requestcontext
+
+        0. check in Django Project settings.py and enable the CSRF Token Feature:
+            MIDDLEWARE_CLASSES = (
+                
+                ...
+
+                # if you want to use Tastypie Session Auth, you must enable this classess
+                'django.middleware.csrf.CsrfViewMiddleware',
+
+                ...
+
+            )
+
+            if this is disable, you can't use SessionAuthentication, because you can get CSRF Token String.
+
+        1. First, you must login Django Admin System, and you will get a accessible permission CSRF Token.
+
+        2. Body Tag Insert:
+            {% csrf_token %}
+
+        3. JQuery Ajax:
+            $(document).ready(function() {
+                // get list test session auth
+                window.test_get_list_first_book_api=function(){
+                    $.ajax({
+                        url:'/api/first_book/?format=json',
+                        type:'get',
+                        contentType:'application/json',
+                        success:function(res,status,xhr){
+                            console.log(res);
+                        },
+                        beforeSend: function(jqXHR, settings) {
+                            // Pull the token out of the DOM.
+                            jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                        },
+                    });
+                };
+            });
+
+

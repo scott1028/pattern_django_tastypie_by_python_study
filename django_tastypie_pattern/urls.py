@@ -31,6 +31,9 @@ urlpatterns = patterns('',
     url(r'^api4/', include(UserModelResource().urls)),
     url(r'^api4/', include(GroupModelResource().urls)),
     url(r'^api4/', include(PermissionModelResource().urls)),
+
+    # test session auth access
+    url(r'^book/index', 'book.views.book_index'),
     # 根據 Tastypie 的 API 設計風格
     #
     # 觀看 api 有那些東西

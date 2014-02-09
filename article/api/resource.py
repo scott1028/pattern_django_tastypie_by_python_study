@@ -9,6 +9,7 @@ from tastypie.serializers import Serializer
 # from tastypie.authentication import BasicAuthentication
 # 不需驗證使用者
 from tastypie.authentication import Authentication
+from tastypie.authentication import SessionAuthentication
 
 # 根據 Django-Admin 後台所題設定的使用者權限來驗證
 # from tastypie.authorization import DjangoAuthorization
@@ -52,6 +53,7 @@ class reporter_resource(ModelResource):
 
         # 驗證用戶是誰(Authentication, BasicAuthentication, ApiKeyAuthentication, SessionAuthentication, DigestAuthentication, OAuthAuthentication, MultiAuthentication)
         authentication = Authentication()
+        # authentication = SessionAuthentication()
 
         # 用戶的權限(Authorization, ReadOnlyAuthorization, DjangoAuthorization)
         authorization = Authorization()
@@ -88,7 +90,8 @@ class article_resource(ModelResource):
         serializer = Serializer() # 預設
 
         # 驗證用戶是誰(Authentication, BasicAuthentication, ApiKeyAuthentication, SessionAuthentication, DigestAuthentication, OAuthAuthentication, MultiAuthentication)
-        authentication = Authentication()
+        # authentication = Authentication()
+        authentication = SessionAuthentication()
 
         # 用戶的權限(Authorization, ReadOnlyAuthorization, DjangoAuthorization)
         authorization = Authorization()

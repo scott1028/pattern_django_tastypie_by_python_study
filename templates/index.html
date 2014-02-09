@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title></title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                // get list test session auth
+                window.test_get_list_first_book_api=function(){
+                    $.ajax({
+                        url:'/api/first_book/?format=json',
+                        type:'get',
+                        contentType:'application/json',
+                        success:function(res,status,xhr){
+                            console.log(res);
+                        },
+                        beforeSend: function(jqXHR, settings) {
+                            // Pull the token out of the DOM.
+                            jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                        },
+                    });
+                };
+            });
+        </script>
+        <!-- Include the CSRF token in the body of the HTML -->
+        {% csrf_token %}
+    </body>
+</html>
