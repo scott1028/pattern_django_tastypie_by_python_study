@@ -455,8 +455,13 @@ Django-Tastypie 範例
 
     ::
 
+        #
+        # 提供類似 Rails 的 rake router, rake task 等多種功能(很讚!)
+        #
+
         # 如果需要類似 rails 的 rake router 功能可以安裝此套件
         ref: https://github.com/django-extensions/django-extensions
+        ref: http://django-extensions.readthedocs.org/en/latest/
 
         # install this package
             pip install django-extensions
@@ -474,6 +479,8 @@ Django-Tastypie 範例
             }
 
         # test it!
+
+            ./manage.py  # show all function which you can do.
 
             ./manage.py show_urls
 
