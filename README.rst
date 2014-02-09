@@ -400,3 +400,39 @@ Django-Tastypie 範例
             });
 
 
+**How to make user login in Server Side views.py**
+
+    ::
+
+        ref: https://docs.djangoproject.com/en/dev/topics/auth/default/#auth-web-requests
+
+
+**Cookie and Session Operation**
+
+    ::
+
+        #
+        # 基本上不使用 cookie 操作, 直接使用 Session 操作即可！
+        #
+        
+        ref: https://docs.djangoproject.com/en/dev/topics/http/sessions/
+        ref: http://stackoverflow.com/questions/17057536/how-to-set-cookie-in-django-and-then-render-template
+
+        from django.http import HttpResponse
+
+        def test(request):
+            # import pdb;pdb.set_trace();
+
+            try:print request.session['test']
+            except:print 'request.session[\'test\'] is not existed!'
+            
+            # store new key-value in session to client
+            request.session['test']='test'
+
+            # build a response for cookie operation.    
+            res=HttpResponse('Thanks for your comment!')
+
+            # set cookie to client
+            res.set_cookie(key='myKey', value='myValue')
+            
+            return res
