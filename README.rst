@@ -449,3 +449,32 @@ Django-Tastypie 範例
             res.set_cookie(key='myKey', value='myValue')
             
             return res
+
+
+**Install django-extensions**
+
+    ::
+
+        # 如果需要類似 rails 的 rake router 功能可以安裝此套件
+        ref: https://github.com/django-extensions/django-extensions
+
+        # install this package
+            pip install django-extensions
+
+        # add to settings.py
+
+            INSTALLED_APPS = (
+                
+                ...
+
+                'django_extensions',
+            
+                ...
+
+            }
+
+        # test it!
+
+            ./manage.py show_urls
+
+

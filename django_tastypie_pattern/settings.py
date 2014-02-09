@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions', # pip install django-extensions, add new method ./manage.py show_urls similar to rake router
     'tastypie', # add tastypie package support
     'book',     # created by manage.py startapp book
     'article',
