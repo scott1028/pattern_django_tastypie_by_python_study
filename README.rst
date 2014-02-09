@@ -406,6 +406,19 @@ Django-Tastypie 範例
 
         ref: https://docs.djangoproject.com/en/dev/topics/auth/default/#auth-web-requests
 
+        #
+        from django.contrib.auth import authenticate, login
+
+        # 用來假設一個使用者執行登入, 這使系統管理員的帳號密碼
+        def c_login(request):
+            username = 'scott'
+            password = '********'
+
+            user = authenticate(username=username, password=password)
+            login(request, user)
+
+            return HttpResponse('simulation do the admin login! after this, you can visite /admin URI.')
+
 
 **Cookie and Session Operation**
 
@@ -414,7 +427,7 @@ Django-Tastypie 範例
         #
         # 基本上不使用 cookie 操作, 直接使用 Session 操作即可！
         #
-        
+
         ref: https://docs.djangoproject.com/en/dev/topics/http/sessions/
         ref: http://stackoverflow.com/questions/17057536/how-to-set-cookie-in-django-and-then-render-template
 

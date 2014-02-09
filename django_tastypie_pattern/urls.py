@@ -35,6 +35,9 @@ urlpatterns = patterns('',
     # test session auth access
     url(r'^book/index', 'book.views.book_index'),
     url(r'^book/test', 'book.views.test'),
+
+    url(r'^book/c_login', 'book.views.c_login'),
+
     # 根據 Tastypie 的 API 設計風格
     #
     # 觀看 api 有那些東西
