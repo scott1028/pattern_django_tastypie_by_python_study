@@ -110,10 +110,10 @@ class first_book_resource(ModelResource):
         # 驗證用戶是誰(Authentication, BasicAuthentication, ApiKeyAuthentication, SessionAuthentication, DigestAuthentication, OAuthAuthentication, MultiAuthentication)
         
         # 無視存取權限(簡單來說就是開放式存取, 不需要認證)
-        # authentication = Authentication()
+        authentication = Authentication()
 
         # 必須先使用 http://127.0.0.1:3333/admin 登入後拿到的 csrf token 就可以用這個 session auth 存取了
-        authentication = SessionAuthentication()
+        # authentication = SessionAuthentication()
 
         # 用戶的權限(Authorization, ReadOnlyAuthorization, DjangoAuthorization)
         authorization = Authorization()

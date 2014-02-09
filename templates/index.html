@@ -4,25 +4,113 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     </head>
     <body>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                // get list test session auth
-                window.test_get_list_first_book_api=function(){
-                    $.ajax({
-                        url:'/api/first_book/?format=json',
-                        type:'get',
-                        contentType:'application/json',
-                        success:function(res,status,xhr){
-                            console.log(res);
-                        },
-                        beforeSend: function(jqXHR, settings) {
-                            // Pull the token out of the DOM.
-                            jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
-                        },
-                    });
-                };
-            });
+        <script>
+            // get list
+            var test_get_people_api=function(){
+                $.ajax({
+                    url:'/api5/people/?format=json',
+                    type:'get',
+                    contentType:'application/json',
+                    success:function(res,status,xhr){
+                        console.log(res);
+                    },
+                    beforeSend: function(jqXHR, settings) {
+                        // Pull the token out of the DOM.
+                        jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                    },
+                });
+            };
+
+            // get
+            var test_get_people_api_by_id=function(id){
+                $.ajax({
+                    url:'/api5/people/'+id.toString()+'/?format=json',
+                    type:'get',
+                    contentType:'application/json',
+                    success:function(res,status,xhr){
+                        console.log(res); 
+                    },
+                    beforeSend: function(jqXHR, settings) {
+                        // Pull the token out of the DOM.
+                        jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                    },
+                });
+            };
+
+            // post
+            var test_post_people_api=function(){
+                $.ajax({
+                    url:'/api5/people/?format=json',
+                    data:'{"name":"create by post with content-type/json'+(new Date).toJSON()+'"}',
+                    type:'post',
+                    contentType:'application/json',
+                    success:function(res,status,xhr){
+                        console.log(res);
+                    },
+                    beforeSend: function(jqXHR, settings) {
+                        // Pull the token out of the DOM.
+                        jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                    },
+                    // 補充說明：
+                    // contentType:'application/x-www-form-urlencoded; charset=UTF-8', 預設這個 Tastypie 並不支援要自己實做。
+                    // processData: false, // 預設為開啟，將對 data 的 JavaScript 物件做 urlencode, 
+                    // 如果使用 application/json 就不用開啟, 但是 data 參數要記得用 JSON.stringify 轉換成 JSON
+                });
+            };
+
+            // put, 可用於更新資料(這個算是替換資料, 會整筆被換掉類似 Ext.apply)
+            var test_put_people_api_by_id=function(id){
+                $.ajax({
+                    url:'/api5/people/'+id.toString()+'/?format=json',
+                    // 如果要更新部分資料原本的欄位依然要補齊
+                    data:'{"name":"create by put with content-type/json'+(new Date).toJSON()+'"}',
+                    type:'put',
+                    contentType:'application/json',
+                    success:function(res,status,xhr){
+                        console.log(res);
+                    },
+                    beforeSend: function(jqXHR, settings) {
+                        // Pull the token out of the DOM.
+                        jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                    },
+                });
+            };
+
+            // patch, 根據 put 在擴充的方法(更適合用來更新資料, 類似 Ext.applyif)
+            var test_patch_people_api_by_id=function(id){
+                $.ajax({
+                    url:'/api5/people/'+id.toString()+'/?format=json',
+                    // 只需要放你想更新的欄位就可以了
+                    data:'{"name":"update by patch with content-type/json'+(new Date).toJSON()+'"}',
+                    type:'patch',
+                    contentType:'application/json',
+                    success:function(res,status,xhr){
+                        console.log(res);
+                    },
+                    beforeSend: function(jqXHR, settings) {
+                        // Pull the token out of the DOM.
+                        jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                    },
+                });
+            };
+
+            // delete
+            var test_delete_people_api_by_id=function(id){
+                $.ajax({
+                    url:'/api5/people/'+id.toString()+'/?format=json',
+                    type:'delete',
+                    contentType:'application/json',
+                    success:function(res,status,xhr){
+                        console.log(res);
+                    },
+                    beforeSend: function(jqXHR, settings) {
+                        // Pull the token out of the DOM.
+                        jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                    },
+                });
+            };
         </script>
+
         <!-- Include the CSRF token in the body of the HTML -->
         {% csrf_token %}
     </body>

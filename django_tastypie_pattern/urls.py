@@ -14,6 +14,9 @@ from article.api.resource import reporter_resource
 
 from api.resource import UserModelResource,PermissionModelResource,GroupModelResource
 
+# 引入 people
+from people.api.resource import people_resource
+
 # print article_resource().urls
 # print reporter_resource().urls
 
@@ -33,10 +36,12 @@ urlpatterns = patterns('',
     url(r'^api4/', include(PermissionModelResource().urls)),
 
     # test session auth access
-    url(r'^book/index', 'book.views.book_index'),
     url(r'^book/test', 'book.views.test'),
 
-    url(r'^book/c_login', 'book.views.c_login'),
+    # SessionAuthorization
+    url(r'^api5/', include(people_resource().urls)),
+    url(r'^api5/c_login', 'people.views.c_login'), # implement user login enterance
+    url(r'^api5/index', 'people.views.index'), # test SessionAuthentication For CRUD
 
     # 根據 Tastypie 的 API 設計風格
     #
