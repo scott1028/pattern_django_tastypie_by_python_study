@@ -17,6 +17,8 @@ from api.resource import UserModelResource,PermissionModelResource,GroupModelRes
 # 引入 people
 from people.api.resource import people_resource
 
+from multi_resource.api.resource import multi_resource
+
 # print article_resource().urls
 # print reporter_resource().urls
 
@@ -42,6 +44,8 @@ urlpatterns = patterns('',
     url(r'^api5/', include(people_resource().urls)),
     url(r'^api5/c_login', 'people.views.c_login'), # implement user login enterance
     url(r'^api5/index', 'people.views.index'), # test SessionAuthentication For CRUD
+
+    url(r'^api6/', include(multi_resource().urls)),
 
     # 根據 Tastypie 的 API 設計風格
     #
