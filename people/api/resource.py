@@ -61,3 +61,16 @@ class people_resource(ModelResource):
 
         # 用戶的權限(Authorization, ReadOnlyAuthorization, DjangoAuthorization)
         authorization = Authorization()
+
+    # 如果把這 override 為 NotImplementedError
+    # 相當於取消 /api5/people/?format=json 的 response 功能
+    # def obj_get_list(self, bundle, **kwargs):
+    #     """
+    #     Fetches the list of objects available on the resource.
+
+    #     This needs to be implemented at the user level.
+
+    #     ``ModelResource`` includes a full working version specific to Django's
+    #     ``Models``.
+    #     """
+    #     raise NotImplementedError()
