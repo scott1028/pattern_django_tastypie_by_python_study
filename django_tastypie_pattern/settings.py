@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'article',
     'south', # add south package support
     'people',
+    'nested',
 )
 
 MIDDLEWARE_CLASSES = (

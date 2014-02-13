@@ -39,10 +39,10 @@ class reporter_resource(ModelResource):
 
         resource_name = 'reporter'
 
-        # 照抄 detail_allowed_methods=list_allowed_methods, 允許接受 Client Request 訪問的方法, 預設有 get 如果設定為 [] 將無法使用這個 Resource。
+        # 定義 multi record 的存取權限有哪些
         list_allowed_methods = ['get', 'post'] # all support is default
 
-        # (*)定義 Restful 支援的方法有哪些, 如果沒寫進去就伺服器就不支援(只需要設定這個即可)
+        # 定義 single record 的存取權限有哪些
         detail_allowed_methods = ['put', 'delete', 'patch'] # all support is default
 
         # 總是回復資料

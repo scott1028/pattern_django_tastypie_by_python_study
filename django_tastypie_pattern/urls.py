@@ -19,6 +19,8 @@ from people.api.resource import people_resource
 
 from multi_resource.api.resource import multi_resource
 
+from nested.api.resource import *
+
 # print article_resource().urls
 # print reporter_resource().urls
 
@@ -45,7 +47,13 @@ urlpatterns = patterns('',
     url(r'^api5/c_login', 'people.views.c_login'), # implement user login enterance
     url(r'^api5/index', 'people.views.index'), # test SessionAuthentication For CRUD
 
-    url(r'^api6/', include(multi_resource().urls)),
+    # Nested Resource 設定
+    url(r'^api6/', include(product_resource().urls)),
+    # url(r'^api7/', include(package_resource().urls)),
+    # 可以不用設定 package_resource, 靠 product_resource 使用 nested package_resource 就可以達成了！
+    
+
+    # url(r'^api7/', include(multi_resource().urls)),
 
     # 根據 Tastypie 的 API 設計風格
     #
