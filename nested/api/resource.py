@@ -37,6 +37,9 @@ class package_resource(ModelResource):
 
     # 必須其中一個設定為 full = False, 將影響是展現 relation resource url 或是 object 資料
     # 千萬不可以兩個都設定為 full = True 會陷入無線迴圈！
+    # 除非你需要潮狀資料顯示才需要這樣設定。
+    # 如果已經有類似 url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/package%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_package_list'), name="api_get_package_list"), 
+    # 方式直接呼叫另一個 resource 的 create_response 可以不用設定這個部分，就能運作了，內部 filter 規則套用 django model 的機制！
     products = fields.ManyToManyField('nested.api.resource.product_resource', 'product_set', full=False)
 
     class Meta:
