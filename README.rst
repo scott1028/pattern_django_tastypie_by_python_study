@@ -626,3 +626,41 @@ Django-Tastypie 範例
                     # .get_list 已經是直接跳過 package_resource 的 list_allowed_methods, detail_allowed_methods 檢查機制了。所以另一邊不用設定
                     # 檢查可否使用 get post put patch delete 等方法在 .dispatch 內之 .method_check 檢查, 跳過他直接使用 get_list 就好了。
                     return packageResource.get_list(request, product=obj)
+
+**Django Table Relation 設計範例**
+
+    ::
+
+        # 其實如果 Model 定義好了, 如果資料表不存在就 syncdb, 如果存在他就會使用現存資料表直接套用。
+        # 所以對於已存在 Tables 的資料庫只要設定正確及可直接使用, 不需要在執行 syndb。
+
+        # models 放在 folder 內的技巧：
+                ...
+            # model_folder/models/__init__.py
+                from .models import *
+
+            # model_folder/models/models.py
+                class theA(models.Model):
+                    a = models.CharField(max_length=100, primary_key=True)
+                    label = models.TextField()
+                    class Meta: 
+                        app_label = 'model_folder'
+                        # 參考 setting 內 install 的 app or app.path
+
+                ...
+
+            # settings.py
+
+                INSTALLED_APPS = (
+                    ...
+                    'model_folder',
+                    ...
+                )
+
+                或上面全免直接設定 model 根目錄路徑：
+
+                INSTALLED_APPS = (
+                    ...
+                    'model_folder.models',
+                    ...
+                )
