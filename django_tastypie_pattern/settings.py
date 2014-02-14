@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'people',
     'nested',
     'model_folder',
+    'nested_resource',
 )
 
 MIDDLEWARE_CLASSES = (

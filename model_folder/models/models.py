@@ -110,4 +110,4 @@ class theH(models.Model):
     
     class Meta: 
         app_label = 'model_folder'
-        db_table = 'theG'
+        db_table = 'theH'
