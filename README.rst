@@ -688,6 +688,12 @@ Django-Tastypie 範例
 
     ::
 
+        # 概念上務必記得 request Query Paramater String 與 **kwargs 是分開的
+            urlpattern 上的 parameter 將被帶入 **kwargs 內, 而且一定會被套用在該 meta.queryset 的 Model 上。
+            而 request Query Paramater String 則只有在 get list 的時候會被在 update 近 **kwargs 內在該 meta.queryset 的 Model 上。
+
+            所以可以確定 urlpattern 上的 parameter 只要按照 Django Relational Model 的 Filter 規則就能運作了, Resource 不大需要額外複寫什麼。
+
         # 總體來說, 所有 get 方法都會調用的方法, 差別只在於 detail 取 index[0]
             get_object_list
 
