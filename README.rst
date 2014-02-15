@@ -697,6 +697,18 @@ Django-Tastypie 範例
         # 總體來說, 所有 get 方法都會調用的方法, 差別只在於 detail 取 index[0]
             get_object_list
 
+        # Tastypie Work Flow 的最後一個調用 Method = {restful verb}_{type} 命名
+            
+            get_list, get_detail, put_list, put_detail, patch_list, patch_detail, post_list(*)
+                都會產生 create_response 給 client 端。
+
+            delete_list, delete_details。
+                不會有任何回應 HttpNoContent 就是沒有訊息還給 Client 的意思。
+
+            post_detail(*)
+                預設為 HttpNotImplemented。
+                restful 好像沒有 post detail 這種不完整資料的方法。
+
         # details and list 之 filter 運作機制
             request query string 只有在 list 條件下會被轉為 kwargs 在套用到 Model 的 QuerySet.filter
             details 模式不會合併 query string 直接使用 url pattern 上的 parameter 做 QuerySet.filter
