@@ -21,6 +21,8 @@ from multi_resource.api.resource import multi_resource
 
 from nested.api.resource import *
 
+from nested_resource_2.resource import *
+
 # print article_resource().urls
 # print reporter_resource().urls
 
@@ -53,10 +55,14 @@ urlpatterns = patterns('',
     # 可以不用設定 package_resource, 靠 product_resource 使用 nested package_resource 就可以達成了！
     
     # 分離 url pattern 設定, 因為沒有放在 api 目錄下所以預設 url 將自動去除 /api/ pre-router
-    url(r'', include('nested_resource.urls')),
+    # url(r'', include('nested_resource.urls')),
 
     # url(r'^api7/', include(multi_resource().urls)),
 
+    url(r'', include(theA_resource2().urls)),
+    url(r'', include(theB_resource2().urls)),
+    url(r'', include(theC_resource2().urls)),
+    url(r'', include(theD_resource2().urls)),
     # 根據 Tastypie 的 API 設計風格
     #
     # 觀看 api 有那些東西
