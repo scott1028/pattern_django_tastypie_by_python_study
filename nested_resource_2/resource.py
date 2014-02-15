@@ -147,12 +147,23 @@ class theB_resource2(ModelResource):
         return [
             # 根據 Django Model Filtering 的錯誤訊息, 參數名稱必須改為 a__a, 才可以順利轉換成 a 剛好是 theA Model 的 primary key
             # 這算一種 hack 寫法, 不需要額外設定 resource 選項
+            
+            #
+            # get_details 會直接使用 kwargs 套用 meta.queryset 的 Filter
+            #
             url(r"^(?P<resource_name>%s)/(?P<%s>.*?)/theA_resource2/(?P<a__a>.*?)%s$" % (self._meta.resource_name, self._meta.detail_uri_name, trailing_slash()), self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
                                                                      # <a> 也可以或是加上前奏詞 ?__field 亦可, ?__ 會被自動去除
                                                                      # 前奏詞彙將是 theB Model 內 Relation Field 或純 Field 詞彙
+            
+            #
+            # get_list 將會使用 kwargs 套用 meta.queryset 加上 request Query String Update 入 filters 內再 filter 資料參考 self.obj_get_list 方法
+            # 其中在 build_filters 將按照這個 filtering = { ... } 設定的資料將可以使用的 filters 建入不能用的則會拋錯, 就是 xxx not in filtering 的訊息由來。
+            #
             url(r"^(?P<resource_name>%s)%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('dispatch_list'), name="api_dispatch_list"),
-            #url(r"^(?P<resource_name>%s)/schema%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_schema'), name="api_get_schema"),
-            #url(r"^(?P<resource_name>%s)/set/(?P<%s_list>.*?)%s$" % (self._meta.resource_name, self._meta.detail_uri_name, trailing_slash()), self.wrap_view('get_multiple'), name="api_get_multiple"),
+            #
+            
+            # url(r"^(?P<resource_name>%s)/schema%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_schema'), name="api_get_schema"),
+            # url(r"^(?P<resource_name>%s)/set/(?P<%s_list>.*?)%s$" % (self._meta.resource_name, self._meta.detail_uri_name, trailing_slash()), self.wrap_view('get_multiple'), name="api_get_multiple"),
             url(r"^(?P<resource_name>%s)/(?P<%s>.*?)%s$" % (self._meta.resource_name, self._meta.detail_uri_name, trailing_slash()), self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
         ]
 

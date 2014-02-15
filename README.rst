@@ -682,3 +682,29 @@ Django-Tastypie 範例
                 'model_folder.models',
                 ...
             )
+
+
+**Tastypie Resource Trace Work flow 解析備忘**
+
+    ::
+
+        # 總體來說, 所有 get 方法都會調用的方法, 差別只在於 detail 取 index[0]
+            get_object_list
+
+        # details and list 之 filter 運作機制
+            request query string 只有在 list 條件下會被轉為 kwargs 在套用到 Model 的 QuerySet.filter
+            details 模式不會合併 query string 直接使用 url pattern 上的 parameter 做 QuerySet.filter
+
+            參考 get_list > obj_get_list 內有一個
+                # Update with the provided kwargs.
+                filters.update(kwargs)
+
+                # 參考 fiterings = { ... } 來把可以 filter 的關鍵字建立出來。
+                # 將組合出符合 Django Model Relational Filter 的 Key-Value Dict
+                applicable_filters = self.build_filters(filters=filters)
+
+                # 透過這些 filters 將物件取出
+                objects = self.apply_filters(bundle.request, applicable_filters)
+                    apply_filters 會呼叫 get_object_list 再搭配 applicable_filters 做為 QuerySet 的 filter 參數。
+
+
