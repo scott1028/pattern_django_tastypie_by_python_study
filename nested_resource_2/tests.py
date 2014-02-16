@@ -47,10 +47,6 @@ class testNestedResource2(TestCase):
         # check it label name
         self.assertEqual(theE.objects.first().label, 'test upload file fd & fd2')
 
-        # theE.objects.all()
-
-        theE.objects.all().delete()
-
     def test_relaton_model(self):
         response = self.client.post('/theE_resource2/', {
             'label':'test upload file',
@@ -60,10 +56,6 @@ class testNestedResource2(TestCase):
         
         # check it label name
         self.assertEqual(theE.objects.first().label, 'test upload file')
-
-        # theE.objects.all().delete()
-
-        # import pdb;pdb.set_trace()
 
     def __del__(self):
         self.upload_file2.close()

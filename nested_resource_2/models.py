@@ -35,6 +35,8 @@ class theE(models.Model):
     fd = models.FileField(upload_to='theE_model')
     fd2 = models.FileField(upload_to='theE_model', null=True, default=None, blank=True)
 
+    # 注意 admin permission 跟 normal delete 的 delete trigger 似乎不同一個
+
 class theF(models.Model):
     f = models.AutoField(primary_key=True)
     label = models.CharField(max_length=200)
