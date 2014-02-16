@@ -725,4 +725,31 @@ Django-Tastypie 範例
                 objects = self.apply_filters(bundle.request, applicable_filters)
                     apply_filters 會呼叫 get_object_list 再搭配 applicable_filters 做為 QuerySet 的 filter 參數。
 
+**Tastypie Resource Mulitpart File Upload Deserializer**
+
+    ::
+
+        # 複寫 Resource 的 deserialize 方法增加 multipart 的支援即可！
+        def deserialize(self, request, data, format=None):
+            if not format:
+                format = request.META.get('CONTENT_TYPE', 'application/json')
+
+            # json 部分
+            if format == 'application/x-www-form-urlencoded':
+                return request.POST
+
+            # mulitpart
+            if format.startswith('multipart'):
+                data = request.POST.copy()
+
+                # 把 File fd 傳給 data dict 內作為 fd 的 Key-Value, 後面會傳給 Django Model ORM 轉入 Database
+                # 似乎是使用 fd 物件(尚未 .read() ) 直接使用 __unicode__ 轉換擋名。
+                data.update(request.FILES)
+
+                # 注意：request.FILES 這個 fd 物件之的 __str__ 方法將 return fb charfield 該填寫的名稱
+                # 然後 .read() 將返回 raw data
+                # import pdb;pdb.set_trace()
+
+                return data
+
 

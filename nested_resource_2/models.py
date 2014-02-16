@@ -33,6 +33,7 @@ class theE(models.Model):
     e = models.AutoField(primary_key=True)
     label = models.CharField(max_length=200)
     fd = models.FileField(upload_to='theE_model')
+    fd2 = models.FileField(upload_to='theE_model', null=True, default=None, blank=True)
 
 class theF(models.Model):
     f = models.AutoField(primary_key=True)
