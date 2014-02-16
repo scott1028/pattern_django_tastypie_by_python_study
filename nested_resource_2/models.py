@@ -28,3 +28,18 @@ class theD(models.Model):
     # 注意：將替被關聯的 package models 增加一個 product_set 屬性
     d = models.AutoField(primary_key=True)
     c = models.ManyToManyField('theC')
+
+class theE(models.Model):
+    e = models.AutoField(primary_key=True)
+    label = models.CharField(max_length=200)
+    fd = models.FileField(upload_to='theE_model')
+
+class theF(models.Model):
+    f = models.AutoField(primary_key=True)
+    label = models.CharField(max_length=200)
+    e = models.ForeignKey('theE')
+
+class theG(models.Model):
+    g = models.AutoField(primary_key=True)
+    label = models.CharField(max_length=200)
+

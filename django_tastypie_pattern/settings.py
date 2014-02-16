@@ -107,5 +107,8 @@ TEMPLATE_DIRS = (
     BASE_DIR + '/templates/'
 )
 
+# ref: https://docs.djangoproject.com/en/dev/ref/models/fields/
+# ref: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-MEDIA_ROOT
+MEDIA_ROOT = BASE_DIR + '/medias/'
 
-# print TEMPLATE_DIRS
+print MEDIA_ROOT
