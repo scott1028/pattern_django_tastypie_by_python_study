@@ -55,7 +55,7 @@ urlpatterns = patterns('',
     # 可以不用設定 package_resource, 靠 product_resource 使用 nested package_resource 就可以達成了！
     
     # 分離 url pattern 設定, 因為沒有放在 api 目錄下所以預設 url 將自動去除 /api/ pre-router
-    # url(r'', include('nested_resource.urls')),
+    url(r'', include('nested_resource.urls')),
 
     # url(r'^api7/', include(multi_resource().urls)),
 
