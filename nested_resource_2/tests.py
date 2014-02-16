@@ -11,7 +11,7 @@ from nested_resource_2.models import *
 
 # Create your tests here.
 
-class testTheE(TestCase):
+class testNestedResource2(TestCase):
     def setUp(self):
         # Every test needs a client.
 
@@ -30,6 +30,16 @@ class testTheE(TestCase):
     def test_upload_file_to_theE(self):
         upload_file = open('manage.py','r')
         response = self.client.post('/admin/nested_resource_2/thee/add/', {'label':'test upload file', 'fd': SimpleUploadedFile(upload_file.name, upload_file.read()) } )
-
+        upload_file.close()
         # check it label name
         self.assertEqual(theE.objects.first().label, 'test upload file')
+
+    def test_relaton_model(self):
+        upload_file = open('manage.py','r')
+        
+        import pdb;pdb.set_trace()
+
+        response = self.client.post('/theE_resource2/', {'label':'test upload file', 'fd': SimpleUploadedFile(upload_file.name, upload_file.read()) } )
+        upload_file.close()
+        # check it label name
+        #self.assertEqual(theE.objects.first().label, 'test upload file')

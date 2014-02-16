@@ -394,3 +394,57 @@ class theD_resource2(ModelResource):
         Returns a queryset that may have been limited by other overrides.
         """
         return self._meta.queryset._clone()
+
+
+# 設定這個 API 回復的內容
+class theE_resource2(ModelResource):
+    # 對應 filtering 的設定
+    # 不會影響 (?P<resource_name>%s)/(?P<%s>.*?)/theA_resource2/(?P<a__a>.*?) 的過濾計算
+    # 第二個參數是 nested_resource_2.resource.theA_resource2 QuerySet 物件的屬性
+    # cs = fields.ToManyField('nested_resource_2.resource.theC_resource2', 'c', full=True)
+
+    class Meta:
+        # 搜尋資料的依據
+        queryset = theE.objects.all()
+
+        # 成為網址的 Resource
+        resource_name = 'theE_resource2'
+
+        # Default is None, which means delegate to the more specific like list_allowed_methods, detail_allowed_methods
+        allowed_methods = None
+
+        # 定義 multi record 的存取權限有哪些
+        list_allowed_methods = ['get','post','put','patch','delete'] # all support is default
+
+        # 定義 single record 的存取權限有哪些
+        detail_allowed_methods = ['get','post','put','patch','delete'] # all support is default
+
+        # 因為 relational resource 直接呼叫 packageResource.get_list 取得物件了, 所以 allowed_method 都不被過濾
+
+        # 定義可以接受 Client Request Query String 的欄位與規則 ex: /api/first_book/?format=json&title=test
+        # filtering = {
+        #     # 打開 Django 的 Relational Model QuerySet Filter 規則給 ManyToMany 的 products 屬性。
+        #     # ToOneField 之 details 的時候似乎不會過濾資料, 似乎 detail toOneRecord 不會運作
+        #     # 注意：get resourceB details 的時候無法使用 relational resource 來 filtering
+        #     # 'd': ALL,
+        #     # 'cs': ALL_WITH_RELATIONS, # 透過 a_set 來濾出 b list 資料
+        #     # 'b': ALL # 可以讓他在 get_list 的時候透過 b(id) = ? 來 Query, 但是在 B List 的時候 Kwargs 傳不進去
+        # }
+
+        authentication = Authentication()
+        authorization = Authorization()
+
+    def deserialize(self, request, data, format=None):
+        if not format:
+            format = request.META.get('CONTENT_TYPE', 'application/json')
+
+        if format == 'application/x-www-form-urlencoded':
+            return request.POST
+
+        if format.startswith('multipart'):
+            data = request.POST.copy()
+            data.update(request.FILES)
+            return data
+
+        return super(theE_resource2, self).deserialize(request, data, format)
+       

@@ -63,6 +63,7 @@ urlpatterns = patterns('',
     url(r'', include(theB_resource2().urls)),
     url(r'', include(theC_resource2().urls)),
     url(r'', include(theD_resource2().urls)),
+    url(r'', include(theE_resource2().urls)),
     # 根據 Tastypie 的 API 設計風格
     #
     # 觀看 api 有那些東西
