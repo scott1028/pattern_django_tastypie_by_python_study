@@ -752,4 +752,45 @@ Django-Tastypie 範例
 
                 return data
 
+**Tastypie 使用者認證的方法**
 
+    ::
+
+        # 通常會包含在存取資料過程中, 但是也可以單獨取出來用
+        def dispatch(self, request_type, request, **kwargs):
+                ...
+            # 認證使用者, 成功後 request.user 將從 None 轉換為 User Instance
+            # 無權限或是失敗會直接 response 回覆客戶端。
+            # 預設採用 django Admin 的使用者權限設定！
+            self.is_authenticated(request)
+                ...
+            return response
+
+
+**Tastypie Resource 調用過程**
+
+    ::
+
+        # 按照 base_urls 內調要用
+
+            dispatch_detail, dispatch_list
+                ->
+
+            dispatch
+                快取節流
+                允許方法 allowed_method
+                使用者認證 self.is_authenticated
+                檢查使用者權限
+                取得下一個實做調用方法
+                ->
+
+            get_list, get_detail, post_list.....等等, return 為 create_response 返回客戶端。
+                # 其內部調用
+                    obj_get_list            # 內部會調用取得件的方法
+                        apply_filters       # 通常會調用 get_object_list(有些動作不會有這步)
+                        get_object_list     # 真正從 QuerySet 取得 Model 物件的方法(全都有調用)
+                    apply_sorting           # 預設資料排序
+                    _meta.paginator_class   # 分頁
+                    full_dehydrate          # 重購資料
+                        dehydrate           # 可以複寫的重購方法
+                        ->
