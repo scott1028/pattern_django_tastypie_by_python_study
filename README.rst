@@ -787,7 +787,11 @@ Django-Tastypie 範例
             get_list, get_detail, post_list.....等等, return 為 create_response 返回客戶端。
                 # 其內部調用
                     obj_get_list            # 內部會調用取得件的方法, Convert Request.GET to kwargs, combine kwargs & Request Query String
+                    
+                        build_filters       # according to _meta.filtering setting to rebuild Dict    
                         apply_filters       # 通常會調用 get_object_list(有些動作不會有這步), build a applicable_filters by filtering setting
+                                            # apply with Django Filter Flow
+                                            
                         get_object_list     # 真正從 QuerySet 取得 Model 物件的方法(全都有調用)
                     apply_sorting           # 預設資料排序
                     _meta.paginator_class   # 分頁
