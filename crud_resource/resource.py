@@ -85,6 +85,64 @@ class theA_resource3(ModelResource):
         authentication = Authentication()
         authorization = Authorization()
 
+    def dispatch(self, request_type, request, **kwargs):
+
+        print request.META['REQUEST_METHOD']
+        print request_type
+
+        """
+        Handles the common operations (allowed HTTP method, authentication,
+        throttling, method lookup) surrounding most CRUD interactions.
+        """
+        allowed_methods = getattr(self._meta, "%s_allowed_methods" % request_type, None)
+
+        if 'HTTP_X_HTTP_METHOD_OVERRIDE' in request.META:
+            request.method = request.META['HTTP_X_HTTP_METHOD_OVERRIDE']
+
+        request_method = self.method_check(request, allowed=allowed_methods)
+        method = getattr(self, "%s_%s" % (request_method, request_type), None)
+        # method maybe equal { post_list }
+
+        # import pdb;pdb.set_trace()
+
+        if method is None:
+            raise ImmediateHttpResponse(response=http.HttpNotImplemented())
+
+        self.is_authenticated(request)
+        self.throttle_check(request)
+
+        # All clear. Process the request.
+        request = convert_post_to_put(request)
+        response = method(request, **kwargs)
+
+        # Add the throttled request.
+        self.log_throttled_access(request)
+
+        # If what comes back isn't a ``HttpResponse``, assume that the
+        # request was accepted and that some action occurred. This also
+        # prevents Django from freaking out.
+        if not isinstance(response, HttpResponse):
+            return http.HttpNoContent()
+
+        return response
+
+    def post_list(self, request, **kwargs):
+        deserialized = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        deserialized = self.alter_deserialized_detail_data(request, deserialized)
+        bundle = self.build_bundle(data=dict_strip_unicode_keys(deserialized), request=request)
+        updated_bundle = self.obj_create(bundle, **self.remove_api_resource_names(kwargs))
+        location = self.get_resource_uri(updated_bundle)
+
+        if not self._meta.always_return_data:
+            return http.HttpCreated(location=location)
+        else:
+            updated_bundle = self.full_dehydrate(updated_bundle)
+            updated_bundle = self.alter_detail_data_to_serialize(request, updated_bundle)
+            return self.create_response(request, updated_bundle, response_class=http.HttpCreated, location=location)
+
+    def put_detail(self, request, **kwargs):
+        return super(theA_resource3, self).put_list(request, **kwargs)
+
 
 # 設定這個 API 回復的內容
 class theB_resource3(ModelResource):
@@ -158,3 +216,35 @@ class theB_resource3(ModelResource):
 # 		// processData: false, // 預設為開啟，將對 data 的 JavaScript 物件做 urlencode, 
 # 		// 如果使用 application/json 就不用開啟, 但是 data 參數要記得用 JSON.stringify 轉換成 JSON
 # 	});	
+
+# 位於 tastypie/resource.py 內
+# Based off of ``piston.utils.coerce_put_post``. Similarly BSD-licensed.
+# And no, the irony is not lost on me.
+def convert_post_to_VERB(request, verb):
+    """
+    Force Django to process the VERB.
+    """
+    if request.method == verb:
+        if hasattr(request, '_post'):
+            del(request._post)
+            del(request._files)
+
+        try:
+            request.method = "POST"
+            request._load_post_and_files()
+            request.method = verb
+        except AttributeError:
+            request.META['REQUEST_METHOD'] = 'POST'
+            request._load_post_and_files()
+            request.META['REQUEST_METHOD'] = verb
+        setattr(request, verb, request.POST)
+
+    return request
+
+
+def convert_post_to_put(request):
+    return convert_post_to_VERB(request, verb='PUT')
+
+
+def convert_post_to_patch(request):
+    return convert_post_to_VERB(request, verb='PATCH')
