@@ -789,6 +789,8 @@ Django-Tastypie 範例
                     obj_get_list            # 內部會調用取得件的方法, Convert Request.GET to kwargs, combine kwargs & Request Query String
                     
                         build_filters       # according to _meta.filtering setting to rebuild Dict    
+                                            # if this resource has a relation_set, need convert xxx_set__field -> xxx__field, and add it to Resource filtering Dict
+                        
                         apply_filters       # 通常會調用 get_object_list(有些動作不會有這步), build a applicable_filters by filtering setting
                                             # apply with Django Filter Flow
                                             
