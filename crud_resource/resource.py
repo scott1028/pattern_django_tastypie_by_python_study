@@ -129,10 +129,24 @@ class theB_resource3(ModelResource):
 # 	$.ajax({
 # 		url:'/theA_resource3/?format=json',
 # 		data:'{
-#		    "a": 50,
-#		    "label": "eeeee",
-#		    "resource_uri": "/theA_resource3/2/",
-#		    "theb_set": ["/theB_resource3/1/"]				// 基本上就用 Resource 吐過來的資料吐回去就可以了
+#		  "label": "application/json add b",
+#		  "theb_set": [{
+#		  	"b": 4,								// 有打 b: 4 就會是 patch
+#		    "a_set": "/theA_resource3/4/",
+#		    "label": "999950"
+#		  },
+#		  {
+#		    "a_set": "/theA_resource3/4/",     // 沒有指定 b 將變為 create
+#		    "label": "92222950"
+#		  },
+#		  {
+#		    "a_set": "/theA_resource3/4/",
+#		    "label": "950"
+#		    },
+#		  {
+#		    "a_set": "/theA_resource3/4/",
+#		    "label": "99"
+#		  }]
 #		}',
 # 		type:'post',
 # 		contentType:'application/json',
