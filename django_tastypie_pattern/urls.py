@@ -23,6 +23,8 @@ from nested.api.resource import *
 
 from nested_resource_2.resource import *
 
+from crud_resource.resource import *
+
 # print article_resource().urls
 # print reporter_resource().urls
 
@@ -64,6 +66,8 @@ urlpatterns = patterns('',
     url(r'', include(theC_resource2().urls)),
     url(r'', include(theD_resource2().urls)),
     url(r'', include(theE_resource2().urls)),
+    url(r'', include(theA_resource3().urls)),
+    url(r'', include(theB_resource3().urls)),
     # 根據 Tastypie 的 API 設計風格
     #
     # 觀看 api 有那些東西

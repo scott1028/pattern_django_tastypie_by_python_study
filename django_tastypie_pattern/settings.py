@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'model_folder',
     'nested_resource_2',
     'nested_resource',
+    'crud_resource',
 )
 
 MIDDLEWARE_CLASSES = (
