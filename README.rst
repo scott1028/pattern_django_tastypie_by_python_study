@@ -822,7 +822,7 @@ Django-Tastypie 範例
 
             get_list, get_detail, post_list.....等等, return 為 create_response 返回客戶端。
                 # 其內部調用
-                    obj_get_list            # 內部會調用取得件的方法, Convert Request.GET to kwargs, combine kwargs & Request Query String
+                    obj_get_list            # 內部會調用取得件的方法, Convert Request.GET to kwargs, combine kwargs & Request Query String, Authorization...
                     
                         build_filters       # according to _meta.filtering setting to rebuild Dict    
                                             # if this resource has a relation_set, need convert xxx_set__field -> xxx__field, and add it to Resource filtering Dict
