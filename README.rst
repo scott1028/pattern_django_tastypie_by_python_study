@@ -836,3 +836,30 @@ Django-Tastypie 範例
                     full_dehydrate          # 重購資料
                         dehydrate           # 可以複寫的重購方法
                         ->
+                        
+                        
+**Tastypie Resource Relational Model Access**
+
+    ::
+    
+        # override here
+        def hydrate(self, bundle):
+            if bundle.obj and bundle.obj.subscriber:
+                subscriber = bundle.obj.subscriber
+                subscriber.status = 'Audit'
+    
+                if 'mobile_device_id' in bundle.data:
+                    subscriber.device_id = bundle.data.pop('mobile_device_id')
+    
+                if 'notification_method' in bundle.data:
+                    subscriber.device_push_method = bundle.data.pop('notification_method')  # noqa
+    
+            return bundle
+    
+        # override here
+        def save(self, bundle, skip_errors=False):
+            bundle = super(SubscriberDataResource, self).save(bundle, skip_errors)
+            bundle.obj.subscriber.save()
+            return bundle
+            
+
