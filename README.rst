@@ -863,3 +863,18 @@ Django-Tastypie 範例
             return bundle
             
 
+**Tastypie Custom Authorization**
+
+    ::
+    
+        # ref: https://github.com/toastdriven/django-tastypie/blob/master/tastypie/authorization.py
+        
+        read_list
+        read_detail
+        create_list
+        create_detail
+        update_list
+        update_detail
+        delete_list
+        delete_detail
+        
