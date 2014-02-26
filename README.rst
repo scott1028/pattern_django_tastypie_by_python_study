@@ -869,12 +869,12 @@ Django-Tastypie 範例
     
         # ref: https://github.com/toastdriven/django-tastypie/blob/master/tastypie/authorization.py
         
-        read_list
-        read_detail
-        create_list
-        create_detail
-        update_list
-        update_detail
-        delete_list
-        delete_detail
+        read_list       GET
+        read_detail     GET
+        create_list      # no anybody call this in resources.py
+        create_detail   POST, PUT
+        update_list     POST, PUT, PATCH, DELETE
+        update_detail   POST, PUT, PATCH, DELETE
+        delete_list     POST, PUT, PATCH, DELETE
+        delete_detail   POST, PUT, PATCH, DELETE
         
