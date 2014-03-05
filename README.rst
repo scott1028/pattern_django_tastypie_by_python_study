@@ -903,4 +903,25 @@ Django-Tastypie 範例
             return applicable_filters
 
 
+**Tastypie Relation Resource Data Show**
+
+    ::
+    
+        class RoleUsersModelResource(ModelResource):
+            user_id = fields.CharField(attribute='user__id')
+            user_name = fields.CharField(attribute='user__username')
+            
+            # 避免參考物件不存在的時候就填入 Null
+            role_name = fields.CharField(attribute='role__name', default=None)
         
+            class Meta:
+                queryset = models.RoleUsers.objects.all()
+                resource_name = 'system_role_users'
+                list_allowed_methods = ['get', 'post']
+                detail_allowed_methods = ['get', 'put', 'patch', 'delete']
+                excludes = ['pk']
+                always_return_data = True
+                filtering = {
+                    'user_id': ALL,
+                    'role_id': ALL
+                }
