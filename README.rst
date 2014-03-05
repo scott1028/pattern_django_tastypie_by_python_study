@@ -878,3 +878,29 @@ Django-Tastypie 範例
         delete_list     POST, PUT, PATCH, DELETE
         delete_detail   POST, PUT, PATCH, DELETE
         
+**Tastypie Hack Custom Filtering**
+
+    ::
+    
+        def build_filters(self, filters=None):
+            applicable_filters = super(UserModelResource, self).build_filters(filters)
+    
+            for field, value in filters.items():
+                if filters.get(field).lower() == 'true':
+                    val = True
+                elif filters.get(field).lower() == 'false':
+                    val = False
+                else:
+                    val = filters.get(field).lower()
+        
+                # 把想要用 Queryset Filter 的欄位加上
+                if re.match('card_issuer', field.lower()) is not None:
+                    applicable_filters.update({field.lower(): val})
+                
+                if re.match('subscriber', field.lower()) is not None:
+                    applicable_filters.update({field.lower(): val})
+        
+            return applicable_filters
+
+
+        
