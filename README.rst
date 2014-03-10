@@ -930,7 +930,7 @@ Django-Tastypie 範例
 
     ::
         
-        # 如果以欄位設定：post, put, patch 不會自動更新, Code 要自己從 Hydrate 加上去。
+        # 如果以欄位設定：post, put, patch 不會自動更新, Code 要自己從 full_hydrate(不是hydrate, 要看 Tastypie Code) 加上去。
         class RoleUsersModelResource(ModelResource):
             user_id = fields.CharField(attribute='user__id')           # post, put, patch 不會自動更新
             user_name = fields.CharField(attribute='user__username')   # post, put, patch 不會自動更新
