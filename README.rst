@@ -1023,3 +1023,63 @@ Django-Tastypie 範例
         
                 authorization = authorization.ResourceAuthorization()
                 authentication = authentication.WebClientAuthentication()
+                
+                
+        # 實際案例(採手動 Hydrate)
+        class IMSIModelResource(BaseModelResource):
+            # 這種設定如果再關聯物件不存在的時候會拋錯，所以改用 dehydrate 來設定。
+            # mno_id = fields.CharField(attribute='sim_profile__mno__id', null=True, blank=True)
+            # sim_profile = fields.CharField(attribute='sim_profile__id', null=True, blank=True)
+            
+            create_user = fields.CharField(attribute='create_user__username',
+                                           null=True)
+            update_user = fields.CharField(attribute='update_user__username',
+                                           null=True)
+        
+            class Meta:
+                queryset = resource.IMSI.objects.all()
+                resource_name = 'system-imsi'
+                list_allowed_methods = ['get', 'post']
+                detail_allowed_methods  = ['get', 'delete', 'put', 'patch']
+                excludes = ['pk']
+                filtering = {
+                    'algorithm': ALL,
+                    'create_date': ALL,
+                    'create_user': ALL,
+                    'expiry_date': ALL,
+                    'iccid': ALL,
+                    'imsi': ALL,
+                    'ki': ALL,
+                    'opc': ALL,
+                    'resource_uri': ALL,
+                    'sim_profile': ALL,
+                    'status': ALL,
+                    'update_date': ALL,
+                    'update_user': ALL,
+                }
+                # update setting
+                authorization = authorization.ResourceAuthorization()
+                authentication = authentication.WebClientAuthentication()
+        
+            # 如果沒有 Relation Resource 設定，只能手動更新關聯物件
+            def full_hydrate(self, bundle):
+                _bundle = super(IMSIModelResource, self).full_hydrate(bundle)
+                if bundle.data.get('mno_id', False) is not False:
+                    _bundle.obj.mno_id = bundle.data.get('mno_id', False)
+        
+                if bundle.data.get('sim_profile_id', False) is not False:
+                    _bundle.obj.sim_profile_id = bundle.data.get('sim_profile_id', False)
+        
+                return _bundle
+        
+            # 用來避免有人用 Hydrate 修改關聯物件資料為不存在的物件
+            def dehydrate(self, bundle):
+                try:
+                    bundle.data['mno_id'] = bundle.obj.sim_profile.mno_id.pk
+                except Exception:
+                    bundle.data['mno_id'] = None
+                try:
+                    bundle.data['sim_profile'] = bundle.obj.sim_profile.pk
+                except Exception:
+                    bundle.data['sim_profile'] = None
+                return bundle
