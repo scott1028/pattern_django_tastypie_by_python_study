@@ -1088,6 +1088,14 @@ Django-Tastypie 範例
                     bundle.data['sim_profile'] = bundle.obj.sim_profile.pk
                 except Exception:
                     bundle.data['sim_profile'] = None
+                    
+                # Tastypie Bug, create_data None -> True
+                if bundle.obj.create_date is None:
+                     bundle.data['create_date'] = None
+        
+                if bundle.obj.update_date is None:
+                     bundle.data['update_date'] = None
+                    
                 return bundle
                 
             # 因為 sim_profile_id, mno_id, 適用 dehydrate 加上去的, 所以只好改寫 build_filters 把他加回去。
