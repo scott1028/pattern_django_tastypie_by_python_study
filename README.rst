@@ -1064,11 +1064,17 @@ Django-Tastypie 範例
             # 如果沒有 Relation Resource 設定，只能手動更新關聯物件
             def full_hydrate(self, bundle):
                 _bundle = super(IMSIModelResource, self).full_hydrate(bundle)
+                
+                # 要確保更新的物件存在
                 if bundle.data.get('mno_id', False) is not False:
-                    _bundle.obj.mno_id = bundle.data.get('mno_id', False)
+                    mno_id = bundle.data.get('mno_id', False)
+                    mno = partner.MNO.objects.get(pk=mno_id)
+                    _bundle.obj.mno_id = mno.pk
         
                 if bundle.data.get('sim_profile_id', False) is not False:
-                    _bundle.obj.sim_profile_id = bundle.data.get('sim_profile_id', False)
+                    sim_profile_id = bundle.data.get('sim_profile_id', False)
+                    sim_profile = resource.SIMProfile.objects.get(pk=sim_profile_id)
+                    _bundle.obj.sim_profile_id = sim_profile.pk
         
                 return _bundle
         
