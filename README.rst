@@ -925,3 +925,101 @@ Django-Tastypie 範例
                     'user_id': ALL,
                     'role_id': ALL
                 }
+
+**Tastypie Relation Resource Data CRUD(Update)**
+
+    ::
+        
+        # 如果以欄位設定：post, put, patch 不會自動更新, Code 要自己從 Hydrate 加上去。
+        class RoleUsersModelResource(ModelResource):
+            user_id = fields.CharField(attribute='user__id')           # post, put, patch 不會自動更新
+            user_name = fields.CharField(attribute='user__username')   # post, put, patch 不會自動更新
+            
+            # 避免參考物件不存在的時候就填入 Null
+            role_name = fields.CharField(attribute='role__name', default=None)
+        
+            class Meta:
+                queryset = models.RoleUsers.objects.all()
+                resource_name = 'system_role_users'
+                list_allowed_methods = ['get', 'post']
+                detail_allowed_methods = ['get', 'put', 'patch', 'delete']
+                excludes = ['pk']
+                always_return_data = True
+                filtering = {
+                    'user_id': ALL,
+                    'role_id': ALL
+                }
+
+
+        # 如果以關聯 Resource 設定：post, put, patch 將可以自動更新。
+        class ProductResource(ModelResource):
+            class Meta:
+                queryset = product.Product.objects.all()
+                resource_name = '_product'
+                list_allowed_methods = ['get', 'post']
+                detail_allowed_methods  = ['get', 'delete', 'put', 'patch']
+                excludes = ['pk']
+                filtering = {}
+        
+                authorization = Authorization()
+                authentication = Authentication()
+        
+        class PackageResource(ModelResource):
+            class Meta:
+                queryset = product.Package.objects.all()
+                resource_name = '_package'
+                list_allowed_methods = ['get', 'post']
+                detail_allowed_methods  = ['get', 'delete', 'put', 'patch']
+                excludes = ['pk']
+                filtering = {}
+        
+                authorization = Authorization()
+                authentication = Authentication()
+        
+        # API List:
+        #   patch, put  /api/models/system_product/1/?format=json
+        #      Data Format(注意 patch 的時候 sub resource 的 id 也一定要輸入, 因為 id 也是可以改的):
+        #          {
+        #              "package": {
+        #                  "approve_date": "2014-02-18T00:00:00",
+        #                  "expird_date": "2224-02-18T00:00:00",
+        #                  "id": "53033bb0f1280058ba339093",
+        #                  "name": "test3",
+        #                  "on_store_date": "2014-02-18T00:00:00",
+        #                  "package_description": "test3",
+        #                  "status": "On_Store"
+        #              },
+        #              "product": {
+        #                  "approve_date": "2014-02-18T00:00:00",
+        #                  "cny_price": "100",
+        #                  "expire_date": "2114-02-18T00:00:00",
+        #                  "id": "53033baff1280058ba339090",
+        #                  "local_currency": "100.0",
+        #                  "local_price": "100",
+        #                  "name": "test",
+        #                  "on_store_date": "2014-02-18",
+        #                  "promotion_message": "test message",
+        #                  "requirement_condition": "PrimaryandSecondID",
+        #                  "resource_condition": "Pair MSISDN/IMSI",
+        #                  "status": "On_Store",
+        #                  "usd_price": "900"
+        #              }
+        #          }
+        #
+        #   delete      /api/models/system_product/1/?format=json
+        #   get         /api/models/system_product/?format=json
+
+        class ProductPackageResource(BaseModelResource):
+            product = fields.ToOneField(ProductResource, 'product', full=True)  # 要以 Relational Resource 定義就可更新關聯欄位了
+            package = fields.ToOneField(PackageResource, 'package', full=True)  # 要以 Relational Resource 定義就可更新關聯欄位了
+        
+            class Meta:
+                queryset = product.ProductPackages.objects.all()
+                resource_name = 'system_product'
+                list_allowed_methods = ['get', 'post']
+                detail_allowed_methods  = ['get', 'delete', 'put', 'patch']
+                excludes = ['pk']
+                filtering = {}
+        
+                authorization = authorization.ResourceAuthorization()
+                authentication = authentication.WebClientAuthentication()
