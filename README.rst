@@ -1081,7 +1081,7 @@ Django-Tastypie 範例
             # 用來避免有人用 Hydrate 修改關聯物件資料為不存在的物件
             def dehydrate(self, bundle):
                 try:
-                    bundle.data['mno_id'] = bundle.obj.sim_profile.mno_id.pk
+                    bundle.data['mno_id'] = bundle.obj.sim_profile.mno.pk
                 except Exception:
                     bundle.data['mno_id'] = None
                 try:
@@ -1089,3 +1089,26 @@ Django-Tastypie 範例
                 except Exception:
                     bundle.data['sim_profile'] = None
                 return bundle
+                
+            # 因為 sim_profile_id, mno_id, 適用 dehydrate 加上去的, 所以只好改寫 build_filters 把他加回去。
+            def build_filters(self, filters=None):
+                applicable_filters = super(IMSIModelResource, self).build_filters(filters)
+        
+                for field, value in filters.items():
+                    if filters.get(field).lower() == 'true':
+                        val = True
+                    elif filters.get(field).lower() == 'false':
+                        val = False
+                    else:
+                        val = filters.get(field).lower()
+        
+                    # 把想要用 Queryset Filter 的欄位加上
+                    if re.match('mno_id', field.lower()) is not None:
+                        # 因為這是孫字輩 Resource
+                        mno_string = field.lower().replace('mno_id', 'mno__id')
+                        applicable_filters.update({'sim_profile__'+mno_string: val})
+        
+                    if re.match('sim_profile', field.lower()) is not None:
+                        applicable_filters.update({field.lower(): val})
+        
+                return applicable_filters
