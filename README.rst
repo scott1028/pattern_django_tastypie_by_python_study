@@ -1122,33 +1122,32 @@ Django-Tastypie 範例
                 return applicable_filters
 
 
-**Tastypie Relation Resource Save 處理過程(Update)**
+**Tastypie Relation Resource Save 處理過程**
 
     ::
 
         def save(self, bundle, skip_errors=False):
-                self.is_valid(bundle)
-        
-                if bundle.errors and not skip_errors:
-                    raise ImmediateHttpResponse(response=self.error_response(bundle.request, bundle.errors))
-        
-                # Check if they're authorized.
-                if bundle.obj.pk:
-                    self.authorized_update_detail(self.get_object_list(bundle.request), bundle)
-                else:
-                    self.authorized_create_detail(self.get_object_list(bundle.request), bundle)
-        
-                # 處理非 ManyToMany Save
-                self.save_related(bundle)
-        
-                # 處理本身的 Save
-                bundle.obj.save()
-                bundle.objects_saved.add(self.create_identifier(bundle.obj))
-        
-                # 處理 ManyToMany Save
-                m2m_bundle = self.hydrate_m2m(bundle)
-                self.save_m2m(m2m_bundle)
-                
-                return bundle
+            self.is_valid(bundle)
     
-                    
+            if bundle.errors and not skip_errors:
+                raise ImmediateHttpResponse(response=self.error_response(bundle.request, bundle.errors))
+    
+            # Check if they're authorized.
+            if bundle.obj.pk:
+                self.authorized_update_detail(self.get_object_list(bundle.request), bundle)
+            else:
+                self.authorized_create_detail(self.get_object_list(bundle.request), bundle)
+    
+            # 處理非 ManyToMany Save
+            self.save_related(bundle)
+    
+            # 處理本身的 Save
+            bundle.obj.save()
+            bundle.objects_saved.add(self.create_identifier(bundle.obj))
+    
+            # 處理 ManyToMany Save
+            m2m_bundle = self.hydrate_m2m(bundle)
+            self.save_m2m(m2m_bundle)
+            
+            return bundle
+
