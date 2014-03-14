@@ -803,7 +803,7 @@ Django-Tastypie 範例
             return response
 
 
-**Tastypie Resource CRUD Bundle.obj 調用過程**
+**Tastypie Resource CRUD Bundle.data <--> Bundle.obj 調用過程**
 
     ::
 
@@ -828,6 +828,8 @@ Django-Tastypie 範例
                                             # obj_update Process:
                                             #   bundle = self.build_bundle(obj=obj, request=request), get obj into bundle
                                             #   bundle = self.full_dehydrate(bundle), dehydrate obj data into bundle.data
+                                            #   此時 bundle.obj 與 bundle.data 資料不會一樣, bundle.obj 是資料庫原本的, bundle.data 是 Client Post 上來新的
+                                            #   再透過 full_hydrate 將 .data 填入 .obj 最後再做 .save()
                     
                         build_filters       # according to _meta.filtering setting to rebuild Dict    
                                             # if this resource has a relation_set, need convert xxx_set__field -> xxx__field, and add it to Resource filtering Dict
