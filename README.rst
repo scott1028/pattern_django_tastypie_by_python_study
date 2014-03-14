@@ -825,7 +825,9 @@ Django-Tastypie 範例
                     obj_get_list            # 內部會調用取得件的方法, Convert Request.GET to kwargs, combine kwargs & Request Query String, Authorization...
                     
                         obj_get             # 調用 obj_get_list 取 index=0 丟給 bundle.obj ( 在 put, patch, delete 情況下 )
-                                            # 之後才會調用 full_hydrate, 所以在 hydrate 之前就可以拿到要 update 的 obj 了
+                                            # obj_update Process:
+                                            #   bundle = self.build_bundle(obj=obj, request=request), get obj into bundle
+                                            #   bundle = self.full_dehydrate(bundle), dehydrate obj data into bundle.data
                     
                         build_filters       # according to _meta.filtering setting to rebuild Dict    
                                             # if this resource has a relation_set, need convert xxx_set__field -> xxx__field, and add it to Resource filtering Dict
