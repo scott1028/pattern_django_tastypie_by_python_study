@@ -1158,3 +1158,11 @@ Django-Tastypie 範例
             
             return bundle
 
+
+**Tastypie 單獨 Hydrate/Dehydrate 特定欄位**
+
+    ::
+    
+        # bundle.data 為 client 送上來的資料, 似乎不會更動 bundle 物件。
+        after_hydrate_data = self.fields['expird_date'].hydrate(bundle)
+        
