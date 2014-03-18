@@ -1166,3 +1166,6 @@ Django-Tastypie 範例
         # bundle.data 為 client 送上來的資料, 似乎不會更動 bundle 物件。
         after_hydrate_data = self.fields['expird_date'].hydrate(bundle)
         
+        # ManyToMany Field
+        after_hydrate_data = self.fields['product_set'].hydrate_m2m(bundle)
+        
