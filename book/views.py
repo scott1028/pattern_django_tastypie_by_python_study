@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 
 #
@@ -23,3 +24,17 @@ def test(request):
 	res.set_cookie(key='myKey', value='myValue')
 	
 	return res
+
+# for test multipart upload, and "expected string or buffer" bug
+@csrf_exempt
+def upload_query(request):
+	if request.method == 'POST':
+		print(request.body)
+	return HttpResponse('Thanks for your comment!')
+
+@csrf_exempt
+def upload(request):
+	if request.method == 'POST':
+		print(request.body, request.FILES)
+
+	return HttpResponse('Thanks for your comment!')

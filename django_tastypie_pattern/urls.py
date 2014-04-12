@@ -25,6 +25,8 @@ from nested_resource_2.resource import *
 
 from crud_resource.resource import *
 
+from book.api.multipart_test import *
+
 # print article_resource().urls
 # print reporter_resource().urls
 
@@ -32,6 +34,10 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'django_tastypie_pattern.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+
+    url(r'^tastypie/', include(upload().urls)),
+    url(r'^tastypie/', include(upload_query().urls)),
+    # url(r'', include(api.DuoSIMBatchModelResource().urls)),
 
     url(r'^admin/', include(admin.site.urls)),
 
@@ -45,6 +51,8 @@ urlpatterns = patterns('',
 
     # test session auth access
     url(r'^book/test', 'book.views.test'),
+    url(r'^book/upload', 'book.views.upload'),
+    url(r'^book/upload_query', 'book.views.upload_query'),
 
     # SessionAuthorization
     url(r'^api5/', include(people_resource().urls)),
