@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 # from django.db import models
 from django.utils.text import slugify
 
+from django.db.models import signals
+
 
 class first_book(models.Model):
     # 如果有資料庫關聯
@@ -57,3 +59,11 @@ class third_book(models.Model):
     # 代表 title 欄位必須強制為 unicode string
     def __unicode__(self):
         return self.title
+
+
+def handle(sender, **kwargs):
+    print sender, kwargs
+    import pdb; pdb.set_trace()
+
+# set signal
+signals.post_save.connect(handle, sender=first_book)
