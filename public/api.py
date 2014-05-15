@@ -19,6 +19,9 @@ class public(ModelResource):
     # MNO.objects.filter(product_id__contains='a9')
     # raise TypeError('Related Field got invalid lookup: %s' % lookup_type)
 
+    # MNO.objects.extra(where=[ "product_id like '%a9%'", "'id >= 1" ])
+	# MyModel.objects.filter(field__regex=r'^10..8..0..$')
+
     # product_id2 = fields.CharField(attribute='product__product_id', null=True, default='', blank=True)
     class Meta:
         queryset = MNO.objects.all()
