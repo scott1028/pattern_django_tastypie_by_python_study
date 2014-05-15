@@ -73,7 +73,7 @@ class package_resource(ModelResource):
 
     def dispatch(self, request_type, request, **kwargs):
 
-        import pdb;pdb.set_trace()
+        # import pdb;pdb.set_trace()
 
         return super(package_resource,self).dispatch(request_type, request, **kwargs)
 

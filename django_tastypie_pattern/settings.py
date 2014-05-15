@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'nested_resource_2',
     'nested_resource',
     'crud_resource',
+    'public'
 )
 
 MIDDLEWARE_CLASSES = (

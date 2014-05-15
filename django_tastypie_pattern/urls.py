@@ -27,6 +27,8 @@ from crud_resource.resource import *
 
 from book.api.multipart_test import *
 
+from public.api import *
+
 # print article_resource().urls
 # print reporter_resource().urls
 
@@ -76,6 +78,8 @@ urlpatterns = patterns('',
     url(r'', include(theE_resource2().urls)),
     url(r'', include(theA_resource3().urls)),
     url(r'', include(theB_resource3().urls)),
+    
+    url(r'', include(public().urls)),
     # 根據 Tastypie 的 API 設計風格
     #
     # 觀看 api 有那些東西
